@@ -12,7 +12,7 @@ module.exports = function (eleventyConfig) {
   });
 
   return {
-    dir: { input: "src", includes: "_includes", data: "_data", output: "dist" },
+    dir: { input: "src", includes: "_includes", data: "_data", output: "." },
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk"
   };
