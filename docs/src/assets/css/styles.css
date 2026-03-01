@@ -91,19 +91,22 @@ a{color:inherit;text-decoration:none}
   position:relative;
   overflow:hidden;
   border-bottom:1px solid rgba(0,0,0,.06);
+  min-height:560px; /* ensure some height even before content loads */
 }
 .hero-bg{
   position:absolute;inset:0;
+  z-index:0;
   /* Keep your skyline file here (png/webp). Adjust opacities if needed. */
   background:
     linear-gradient(90deg, rgba(246,244,241,.78), rgba(246,244,241,.42)),
-    url("/assets/img/lansing-skyline.webp") center/cover no-repeat;
+    url("/assets/img/lansing-skyline.png") center/cover no-repeat;
   filter:saturate(.95) contrast(1.02);
 }
 
 /* Layout tuned for cutout overlap */
 .hero-grid{
   position:relative;
+  z-index:1;
   display:grid;
   grid-template-columns:1.1fr .9fr;
   align-items:end;
