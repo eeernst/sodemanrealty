@@ -1,0 +1,38 @@
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/" aria-label="Sodeman Realty home">
+      <img src="/assets/logo.svg" alt="Sodeman Realty" class="logo" />
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="/listings/">Featured Listings</a>
+      <a href="/about/">About</a>
+      <a href="/blog/">Market Updates</a>
+      <a href="/contact/" class="btn-outline">Contact</a>
+      <a href="tel:{{ site.phone_tel }}" class="btn-primary">Call {{ site.phone_display }}</a>
+    </nav>
+
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div id="mobileMenu" class="mobile-menu" hidden>
+    <div class="container mobile-menu-inner">
+      <div class="mobile-utility">
+        <a href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      </div>
+      <div class="mobile-links">
+        <a href="/listings/">Featured Listings</a>
+        <a href="/about/">About</a>
+        <a href="/blog/">Market Updates</a>
+        <a href="/contact/">Contact</a>
+      </div>
+      <div class="mobile-ctas">
+        <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+        <a class="btn-secondary" href="{{ site.calendly_url }}">Schedule Consultation</a>
+      </div>
+    </div>
+  </div>
+</header>

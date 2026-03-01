@@ -1,0 +1,19 @@
+---
+layout: layout.njk
+title: Market Updates
+description: Monthly Lansing-area market notes for first-time buyers and investment properties.
+---
+
+<section class="container section">
+  <h1>Market Updates</h1>
+  <p class="muted">Monthly notes across pricing, inventory, negotiation, and investment fundamentals. Not financial advice.</p>
+
+  <div class="post-list" style="margin-top:18px">
+    {% for post in collections.posts %}
+      <article class="post-row" style="padding:14px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+        <a href="{{ post.url }}"><h2 style="margin:0;color:var(--navy)">{{ post.data.title }}</h2></a>
+        <div class="muted" style="margin-top:6px">{{ post.date | date("yyyy-MM-dd") }} • {{ post.data.excerpt }}</div>
+      </article>
+    {% endfor %}
+  </div>
+</section>

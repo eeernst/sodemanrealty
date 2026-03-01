@@ -1,0 +1,92 @@
+---
+layout: layout.njk
+title: Sodeman Realty
+description: Trusted guidance for first-time buyers and investment properties in Lansing, Michigan.
+---
+
+<section class="hero" aria-label="Hero">
+  <div class="hero-bg" role="img" aria-label="Stylized Lansing skyline background"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <h1>{{ site.hero_headline }}</h1>
+      <p class="subheadline">{{ site.hero_subheadline }}</p>
+
+      <div class="cta">
+        <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+        <a class="btn-secondary" href="{{ site.calendly_url }}">Schedule Consultation</a>
+        <a class="btn-link" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-pill">First-time buyers</div>
+        <div class="trust-pill">Investment properties</div>
+        <div class="trust-pill">{{ site.service_area }}</div>
+      </div>
+    </div>
+
+    <div class="hero-photo reveal">
+      <img src="/assets/img/joel-headshot.jpg" alt="Joel Sodeman, Broker" />
+      <div class="caption">
+        <div class="name">{{ site.broker }}</div>
+        <div class="role">Broker, {{ site.name }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section reveal">
+  <h2>Structured guidance, conservative execution</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Disciplined search</h3>
+      <p>Define constraints, filter noise, and focus on properties that meet your plan.</p>
+    </div>
+    <div class="card">
+      <h3>Offer strategy</h3>
+      <p>Comparable analysis, risk controls, and negotiation aligned to your timeline.</p>
+    </div>
+    <div class="card">
+      <h3>Closing support</h3>
+      <p>Inspection response and coordination to reduce surprises and protect outcomes.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section reveal">
+  <h2>Featured listings</h2>
+  <p class="muted">Curated listings for V1. Each card links to an existing listing URL.</p>
+  <div class="listing-grid">
+    <a class="listing-card" href="https://example.com/listing-1" target="_blank" rel="noopener">
+      <div class="listing-img skeleton" aria-hidden="true"></div>
+      <div class="listing-meta">
+        <div class="listing-title">Example Listing — Lansing</div>
+        <div class="listing-sub">$289,900 • 3 Bed • 2 Bath</div>
+      </div>
+    </a>
+    <a class="listing-card" href="https://example.com/listing-2" target="_blank" rel="noopener">
+      <div class="listing-img skeleton" aria-hidden="true"></div>
+      <div class="listing-meta">
+        <div class="listing-title">Example Duplex — East Lansing</div>
+        <div class="listing-sub">$314,900 • 2 Units</div>
+      </div>
+    </a>
+    <a class="listing-card" href="https://example.com/listing-3" target="_blank" rel="noopener">
+      <div class="listing-img skeleton" aria-hidden="true"></div>
+      <div class="listing-meta">
+        <div class="listing-title">Example Starter Home — Delta Twp</div>
+        <div class="listing-sub">$219,900 • 2 Bed • 1 Bath</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="container section reveal">
+  <h2>Client notes (placeholder)</h2>
+  {% include "testimonials.njk" %}
+</section>
+
+<section class="container section reveal">
+  <h2>Market updates</h2>
+  <p class="muted">Monthly notes on pricing, inventory, and negotiation conditions in the Lansing area.</p>
+  <a class="btn-outline" href="/blog/">Read market updates</a>
+</section>

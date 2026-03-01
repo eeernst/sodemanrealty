@@ -1,0 +1,33 @@
+---
+layout: layout.njk
+title: Contact
+description: Contact Joel Sodeman, Broker at Sodeman Realty.
+---
+
+<section class="container section">
+  <h1>Contact</h1>
+  <p class="muted">Call, email, or schedule a consultation.</p>
+
+  <div class="cta">
+    <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+    <a class="btn-secondary" href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <a class="btn-outline" href="{{ site.calendly_url }}">Schedule Consultation</a>
+  </div>
+
+  <div style="margin-top:22px">
+    <h2>Schedule a consultation</h2>
+    <p class="muted">Inline Calendly embed. Replace the Calendly URL in site config if needed.</p>
+    <div id="calendly" style="min-height:760px;border:1px solid rgba(0,0,0,.08);border-radius:16px;overflow:hidden;background:#fff"></div>
+  </div>
+</section>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+  window.addEventListener("load", function(){
+    if (!window.Calendly) return;
+    Calendly.initInlineWidget({
+      url: "{{ site.calendly_url }}",
+      parentElement: document.getElementById("calendly")
+    });
+  });
+</script>
