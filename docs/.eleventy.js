@@ -1,5 +1,11 @@
+const { DateTime } = require("luxon");
+
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+
+  eleventyConfig.addFilter("date", function(dateObj, format) {
+    return DateTime.fromJSDate(dateObj).toFormat(format);
+  });
 
   eleventyConfig.addCollection("posts", function (collectionApi) {
     return collectionApi.getFilteredByGlob("src/blog/*.md").sort((a,b) => b.date - a.date);
