@@ -32,3 +32,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/dist
           cname: sodemanrealty.com
+          force_orphan: true
