@@ -1,5 +1,11 @@
-# Ignore Eleventy build output if we switch to docs as output
-/docs/dist/
+# Node modules and lock files
+/node_modules/
+/docs/node_modules/
+package-lock.json
+docs/package-lock.json
+
+# temporary files
+.DS_Store
 
 # Node modules and lock files
 /node_modules/
