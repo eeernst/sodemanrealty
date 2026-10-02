@@ -50,7 +50,7 @@
       </div>
       <div class="mobile-ctas">
         <a class="btn-primary" href="tel:+15178986412">Call 517-898-6412</a>
-        <a class="btn-secondary" href="https://calendly.com/joel-sodeman">Schedule Consultation</a>
+        <a class="btn-secondary" href="/contact/#schedule">Request a Consultation</a>
       </div>
     </div>
   </div>
@@ -59,31 +59,36 @@
   <main>
 <section class="container section">
   <h1>Contact</h1>
-  <p class="muted">Call, email, or schedule a consultation with Joel Sodeman.</p>
+  <p class="muted">Call, email, or request a consultation with Joel Sodeman.</p>
 
   <div class="cta">
     <a class="btn-primary" href="tel:+15178986412">Call 517-898-6412</a>
     <a class="btn-secondary" href="mailto:joel@sodemanrealty.com">joel@sodemanrealty.com</a>
-    <a class="btn-outline" href="https://calendly.com/joel-sodeman" target="_blank" rel="noopener">Schedule Consultation</a>
+    <a class="btn-outline" href="#schedule">Request a Consultation</a>
   </div>
 
-  <div style="margin-top:22px">
-    <h2>Schedule a consultation</h2>
-    <p class="muted">Pick a time that works. You’ll get a calendar confirmation after booking.</p>
-    <div id="calendly" style="min-height:760px;border:1px solid rgba(0,0,0,.08);border-radius:16px;overflow:hidden;background:#fff"></div>
+  <div id="schedule" class="schedule-panel" style="margin-top:22px">
+    <h2>Request a consultation</h2>
+    
+      <p class="muted">
+        Online calendar booking isn’t live yet. The fastest paths are a call or a short email with a few preferred times—
+        Joel will confirm a slot that works.
+      </p>
+      <div class="cards schedule-options">
+        <div class="card">
+          <h3>Call</h3>
+          <p>Speak directly and set a time in one conversation.</p>
+          <a class="btn-primary" href="tel:+15178986412">Call 517-898-6412</a>
+        </div>
+        <div class="card">
+          <h3>Email a time request</h3>
+          <p>Opens your mail app with a short template you can edit before sending.</p>
+          <a class="btn-secondary" href="mailto:joel@sodemanrealty.com?subject=Consultation%20request%20%E2%80%94%20Sodeman%20Realty&amp;body=Hi%20Joel%2C%0A%0AI%20would%20like%20to%20schedule%20a%20consultation.%0A%0APreferred%20times%3A%0A-%20%0A-%20%0A%0AGoal%20(first%20home%20%2F%20investment%20%2F%20other)%3A%0AArea%20or%20price%20range%20(optional)%3A%0A%0AThanks%2C%0A">Email consultation request</a>
+        </div>
+      </div>
+    
   </div>
 </section>
-
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-<script>
-  window.addEventListener("load", function(){
-    if (!window.Calendly) return;
-    Calendly.initInlineWidget({
-      url: "https://calendly.com/joel-sodeman",
-      parentElement: document.getElementById("calendly")
-    });
-  });
-</script>
 </main>
   <footer class="footer">
   <div class="container section">

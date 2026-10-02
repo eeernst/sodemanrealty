@@ -16,7 +16,7 @@ Last updated: 2026-10-02
 
 - [ ] Confirm phone `517-898-6412` is the primary public number
 - [ ] Confirm email `joel@sodemanrealty.com` is monitored and preferred
-- [ ] Confirm Calendly URL `https://calendly.com/joel-sodeman` (active event types, duration, buffers)
+- [ ] **BLOCKER for online booking:** Provide a working scheduling URL (Calendly or other). `https://calendly.com/joel-sodeman` returns **404** — removed from the live site on 2026-10-02. Until then, CTAs go to Contact → call / email request.
 - [ ] Preferred response-time language for the site (e.g., “same business day”)
 - [ ] Hours / availability notes (evenings, weekends, by appointment only)
 
@@ -66,6 +66,6 @@ Last updated: 2026-10-02
 | Domain | sodemanrealty.com | Live |
 | Phone | 517-898-6412 | Verify |
 | Email | joel@sodemanrealty.com | Verify |
-| Calendly | calendly.com/joel-sodeman | Verify |
+| Calendly | previously calendly.com/joel-sodeman | **404 — needs new URL** |
 | Focus | First-time buyers + investment properties | Confirm |
 | Area | Lansing, East Lansing, surrounding Mid-Michigan | Confirm |
