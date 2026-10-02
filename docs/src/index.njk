@@ -87,5 +87,17 @@ description: Trusted guidance for first-time buyers and investment properties in
 <section class="container section reveal">
   <h2>Market updates</h2>
   <p class="muted">Notes on pricing discipline, inventory, and negotiation conditions in the Lansing area.</p>
-  <a class="btn-outline" href="/blog/">Read market updates</a>
+  <div class="post-list" style="margin-top:14px">
+    {% for post in collections.posts %}
+      {% if loop.index0 < 3 %}
+        <article class="post-row" style="padding:12px 0;border-bottom:1px solid rgba(0,0,0,.06)">
+          <a href="{{ post.url }}"><strong style="color:var(--navy)">{{ post.data.title }}</strong></a>
+          <div class="muted" style="margin-top:4px">{{ post.date | date("yyyy-MM-dd") }} · {{ post.data.excerpt }}</div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div style="margin-top:16px">
+    <a class="btn-outline" href="/blog/">All market updates</a>
+  </div>
 </section>
