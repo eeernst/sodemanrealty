@@ -1,44 +1,57 @@
 ---
 layout: layout.njk
-title: Featured Listings
-description: Featured listings and how Sodeman Realty approaches property search in Lansing, Michigan.
+title: Selected Work
+description: Recent Mid-Michigan closings associated with Joel Sodeman and Sodeman Realty.
 ---
 
 <section class="container section">
-  <h1>Featured Listings</h1>
+  <h1>Selected Work</h1>
+  <p class="muted">
+    Recent closings from Joel’s public Zillow track record
+    (<a href="{{ listings.profile_url }}" target="_blank" rel="noopener">soldbysoda</a>).
+    No active for-sale listings were published there at last update ({{ listings.captured }}).
+  </p>
 
   {% if listings.items and listings.items.length %}
-    <p class="muted">Selected opportunities in the {{ site.service_area_short }} area. Links open the full listing page.</p>
-    <div class="listing-grid">
+    <div class="listing-grid" style="margin-top:18px">
       {% for item in listings.items %}
         <a class="listing-card" href="{{ item.url }}" target="_blank" rel="noopener">
-          {% if item.image %}
-            <img class="listing-img" src="{{ item.image }}" alt="" />
-          {% else %}
-            <div class="listing-img" aria-hidden="true"></div>
-          {% endif %}
+          <div class="listing-media">
+            {% if item.image %}
+              <img class="listing-img" src="{{ item.image }}" alt="{{ item.image_alt or item.title }}" loading="lazy" width="640" height="480" />
+            {% else %}
+              <div class="listing-img listing-img--sold" aria-hidden="true"></div>
+            {% endif %}
+            <span class="listing-badge">{{ item.status | upper }}</span>
+          </div>
           <div class="listing-meta">
             <div class="listing-title">{{ item.title }}</div>
             <div class="listing-sub">{{ item.subtitle }}</div>
+            <div class="listing-side">{{ item.side }} · {{ item.timing }}</div>
           </div>
         </a>
       {% endfor %}
     </div>
+    <p class="fineprint" style="margin-top:18px">
+      {{ listings.source_note }}
+      Details can change; confirm with Joel for current marketing use.
+      <a href="{{ listings.profile_url }}" target="_blank" rel="noopener">View full profile on Zillow</a>.
+    </p>
   {% else %}
-    <p class="muted">No featured listings are published on the site right now.</p>
     <div class="empty-panel">
-      <p>
-        Sodeman Realty focuses on buyer and investor representation: defining constraints, screening inventory,
-        and advancing offers that fit the plan. When a property is a strong fit for public highlight, it will appear here with a link to the full listing.
-      </p>
-      <p>
-        For current opportunities in {{ site.service_area_short }}, the fastest path is a short consult so search criteria are set before you tour.
-      </p>
+      <p>No selected closings are published on the site right now.</p>
       <div class="cta">
-        <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
-        <a class="btn-secondary" href="/contact/#schedule">Request a Consultation</a>
-        <a class="btn-outline" href="mailto:{{ site.email }}">Email Joel</a>
+        <a class="btn-primary" href="/contact/#schedule">Request a Consultation</a>
       </div>
     </div>
   {% endif %}
+
+  <div class="empty-panel" style="margin-top:28px">
+    <h2 style="margin-top:0">Looking for something currently available?</h2>
+    <p class="muted">Inventory moves quickly. A short consult is the fastest way to screen what’s on the market against your plan.</p>
+    <div class="cta">
+      <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+      <a class="btn-secondary" href="/contact/#schedule">Request a Consultation</a>
+    </div>
+  </div>
 </section>

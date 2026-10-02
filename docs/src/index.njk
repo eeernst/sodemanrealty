@@ -53,33 +53,29 @@ description: Trusted guidance for first-time buyers and investment properties in
 </section>
 
 <section class="container section reveal">
-  <h2>Featured listings</h2>
-  {% if listings.items and listings.items.length %}
-    <p class="muted">Selected opportunities in the {{ site.service_area_short }} area.</p>
-    <div class="listing-grid">
-      {% for item in listings.items %}
+  <h2>Selected work</h2>
+  <p class="muted">Recent Mid-Michigan closings from Joel’s public track record. <a href="/listings/">See more selected work</a>.</p>
+  <div class="listing-grid">
+    {% for item in listings.items %}
+      {% if item.featured %}
         <a class="listing-card" href="{{ item.url }}" target="_blank" rel="noopener">
-          {% if item.image %}
-            <img class="listing-img" src="{{ item.image }}" alt="" />
-          {% else %}
-            <div class="listing-img" aria-hidden="true"></div>
-          {% endif %}
+          <div class="listing-media">
+            {% if item.image %}
+              <img class="listing-img" src="{{ item.image }}" alt="{{ item.image_alt or item.title }}" loading="lazy" width="640" height="480" />
+            {% else %}
+              <div class="listing-img listing-img--sold" aria-hidden="true"></div>
+            {% endif %}
+            <span class="listing-badge">{{ item.status | upper }}</span>
+          </div>
           <div class="listing-meta">
             <div class="listing-title">{{ item.title }}</div>
             <div class="listing-sub">{{ item.subtitle }}</div>
+            <div class="listing-side">{{ item.side }} · {{ item.timing }}</div>
           </div>
         </a>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="empty-panel">
-      <p>Inventory moves quickly in Mid-Michigan. Rather than stale sample cards, Joel curates opportunities against your plan—price band, neighborhood, and use case.</p>
-      <div class="cta">
-        <a class="btn-primary" href="/contact/#schedule">Request a search consult</a>
-        <a class="btn-outline" href="/listings/">How featured listings work</a>
-      </div>
-    </div>
-  {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
 </section>
 
 <section class="container section reveal">

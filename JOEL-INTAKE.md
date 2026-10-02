@@ -30,7 +30,7 @@ Last updated: 2026-10-02
 
 ## Listings & market content
 
-- [ ] Active featured listing URLs (MLS/public pages), photos, price, beds/baths, address or neighborhood
+- [ ] **Listings for site:** Confirm which Zillow closings (soldbysoda) may be featured; supply preferred photos. Draft pulled 2026-10-02 — 0 active / 5 recent solds in `docs/src/_data/listings.json`.
 - [ ] Policy for featuring others’ listings vs. only his own / buyer-side opportunities
 - [ ] Permission and cadence for monthly market updates (topics, data sources, review-before-publish?)
 - [ ] Past closed-deal stats he is comfortable publishing (optional; never invent)
