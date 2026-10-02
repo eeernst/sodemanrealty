@@ -1,36 +1,44 @@
 ---
 layout: layout.njk
 title: Featured Listings
-description: Curated featured listings in the Lansing, Michigan area.
+description: Featured listings and how Sodeman Realty approaches property search in Lansing, Michigan.
 ---
 
 <section class="container section">
   <h1>Featured Listings</h1>
-  <p class="muted">V1: curated links to active listings. Replace example URLs with real listing pages.</p>
 
-  <div class="listing-grid">
-    <a class="listing-card" href="https://example.com/listing-1" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Listing — Lansing</div>
-        <div class="listing-sub">$289,900 • 3 Bed • 2 Bath</div>
+  {% if listings.items and listings.items.length %}
+    <p class="muted">Selected opportunities in the {{ site.service_area_short }} area. Links open the full listing page.</p>
+    <div class="listing-grid">
+      {% for item in listings.items %}
+        <a class="listing-card" href="{{ item.url }}" target="_blank" rel="noopener">
+          {% if item.image %}
+            <img class="listing-img" src="{{ item.image }}" alt="" />
+          {% else %}
+            <div class="listing-img" aria-hidden="true"></div>
+          {% endif %}
+          <div class="listing-meta">
+            <div class="listing-title">{{ item.title }}</div>
+            <div class="listing-sub">{{ item.subtitle }}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No featured listings are published on the site right now.</p>
+    <div class="empty-panel">
+      <p>
+        Sodeman Realty focuses on buyer and investor representation: defining constraints, screening inventory,
+        and advancing offers that fit the plan. When a property is a strong fit for public highlight, it will appear here with a link to the full listing.
+      </p>
+      <p>
+        For current opportunities in {{ site.service_area_short }}, the fastest path is a short consult so search criteria are set before you tour.
+      </p>
+      <div class="cta">
+        <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+        <a class="btn-secondary" href="{{ site.calendly_url }}">Schedule Consultation</a>
+        <a class="btn-outline" href="mailto:{{ site.email }}">Email Joel</a>
       </div>
-    </a>
-
-    <a class="listing-card" href="https://example.com/listing-2" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Duplex — East Lansing</div>
-        <div class="listing-sub">$314,900 • 2 Units</div>
-      </div>
-    </a>
-
-    <a class="listing-card" href="https://example.com/listing-3" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Starter Home — Delta Twp</div>
-        <div class="listing-sub">$219,900 • 2 Bed • 1 Bath</div>
-      </div>
-    </a>
-  </div>
+    </div>
+  {% endif %}
 </section>

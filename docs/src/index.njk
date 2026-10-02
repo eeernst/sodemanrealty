@@ -20,15 +20,15 @@ description: Trusted guidance for first-time buyers and investment properties in
       <div class="trust-row">
         <div class="trust-pill">First-time buyers</div>
         <div class="trust-pill">Investment properties</div>
-        <div class="trust-pill">{{ site.service_area }}</div>
+        <div class="trust-pill">{{ site.service_area_short }}</div>
       </div>
     </div>
 
     <div class="hero-figure reveal" aria-hidden="true">
       <img src="/assets/img/joel-cutout.webp" alt="" />
       <div class="hero-figure-tag">
-        <div class="name">Joel Sodeman</div>
-        <div class="role">Broker, Sodeman Realty</div>
+        <div class="name">{{ site.broker }}</div>
+        <div class="role">Broker, {{ site.name }}</div>
       </div>
     </div>
   </div>
@@ -54,39 +54,42 @@ description: Trusted guidance for first-time buyers and investment properties in
 
 <section class="container section reveal">
   <h2>Featured listings</h2>
-  <p class="muted">Curated listings for V1. Each card links to an existing listing URL.</p>
-  <div class="listing-grid">
-    <a class="listing-card" href="https://example.com/listing-1" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Listing — Lansing</div>
-        <div class="listing-sub">$289,900 • 3 Bed • 2 Bath</div>
+  {% if listings.items and listings.items.length %}
+    <p class="muted">Selected opportunities in the {{ site.service_area_short }} area.</p>
+    <div class="listing-grid">
+      {% for item in listings.items %}
+        <a class="listing-card" href="{{ item.url }}" target="_blank" rel="noopener">
+          {% if item.image %}
+            <img class="listing-img" src="{{ item.image }}" alt="" />
+          {% else %}
+            <div class="listing-img" aria-hidden="true"></div>
+          {% endif %}
+          <div class="listing-meta">
+            <div class="listing-title">{{ item.title }}</div>
+            <div class="listing-sub">{{ item.subtitle }}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-panel">
+      <p>Inventory moves quickly in Mid-Michigan. Rather than stale sample cards, Joel curates opportunities against your plan—price band, neighborhood, and use case.</p>
+      <div class="cta">
+        <a class="btn-primary" href="{{ site.calendly_url }}">Schedule a search consult</a>
+        <a class="btn-outline" href="/listings/">How featured listings work</a>
       </div>
-    </a>
-    <a class="listing-card" href="https://example.com/listing-2" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Duplex — East Lansing</div>
-        <div class="listing-sub">$314,900 • 2 Units</div>
-      </div>
-    </a>
-    <a class="listing-card" href="https://example.com/listing-3" target="_blank" rel="noopener">
-      <div class="listing-img skeleton" aria-hidden="true"></div>
-      <div class="listing-meta">
-        <div class="listing-title">Example Starter Home — Delta Twp</div>
-        <div class="listing-sub">$219,900 • 2 Bed • 1 Bath</div>
-      </div>
-    </a>
-  </div>
+    </div>
+  {% endif %}
 </section>
 
 <section class="container section reveal">
-  <h2>Client notes (placeholder)</h2>
-  {% include "testimonials.njk" %}
+  <h2>How working together looks</h2>
+  <p class="muted">A simple process designed for clarity under pressure.</p>
+  {% include "process.njk" %}
 </section>
 
 <section class="container section reveal">
   <h2>Market updates</h2>
-  <p class="muted">Monthly notes on pricing, inventory, and negotiation conditions in the Lansing area.</p>
+  <p class="muted">Notes on pricing discipline, inventory, and negotiation conditions in the Lansing area.</p>
   <a class="btn-outline" href="/blog/">Read market updates</a>
 </section>

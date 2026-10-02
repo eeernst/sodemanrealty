@@ -7,8 +7,8 @@ description: About Joel Sodeman and Sodeman Realty in Lansing, Michigan.
 <section class="container section">
   <h1>About</h1>
   <p>
-    Joel Sodeman founded <strong>Sodeman Realty</strong> on a simple principle: real estate decisions deserve disciplined counsel.
-    Serving Lansing and the surrounding communities, Joel works primarily with first-time buyers and property investors seeking clarity,
+    {{ site.broker }} founded <strong>{{ site.name }}</strong> on a simple principle: real estate decisions deserve disciplined counsel.
+    Serving {{ site.service_area }}, Joel works primarily with first-time buyers and property investors seeking clarity,
     structure, and steady representation.
   </p>
 
@@ -24,6 +24,16 @@ description: About Joel Sodeman and Sodeman Realty in Lansing, Michigan.
     <div class="card">
       <h3>Local orientation</h3>
       <p>{{ site.service_area }} — with neighborhood-level realism on pricing and demand.</p>
+    </div>
+  </div>
+
+  <div class="empty-panel" style="margin-top:22px">
+    <h2 style="margin-top:0">Ready to talk through a plan?</h2>
+    <p class="muted">Call, email, or book a consultation—no pressure pitch, just a clear next step.</p>
+    <div class="cta">
+      <a class="btn-primary" href="tel:{{ site.phone_tel }}">Call {{ site.phone_display }}</a>
+      <a class="btn-secondary" href="{{ site.calendly_url }}">Schedule Consultation</a>
+      <a class="btn-outline" href="/contact/">All contact options</a>
     </div>
   </div>
 </section>

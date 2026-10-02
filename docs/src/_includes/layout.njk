@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>{{ title or site.name }} | {{ site.service_area }}</title>
+  <title>{% if title and title != site.name %}{{ title }} | {{ site.name }}{% else %}{{ site.name }} | {{ site.service_area_short }}{% endif %}</title>
   <meta name="description" content="{{ description or (site.name ~ ' — ' ~ site.hero_subheadline) }}" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
   <script defer src="/assets/js/main.js"></script>
 
-  <meta property="og:title" content="{{ title or site.name }}" />
+  <meta property="og:title" content="{% if title and title != site.name %}{{ title }} | {{ site.name }}{% else %}{{ site.name }}{% endif %}" />
   <meta property="og:description" content="{{ description or site.hero_subheadline }}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://{{ site.domain }}{{ page.url }}" />
+  <meta property="og:image" content="https://{{ site.domain }}/assets/img/joel-headshot.jpg" />
+  <meta name="twitter:card" content="summary" />
 </head>
 <body>
   {% include "nav.njk" %}
