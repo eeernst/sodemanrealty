@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Phase 1: Joel’s review | Sodeman Realty</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg); }
+    [hidden] { display: none !important; }
+    button { transition: all 0.15s ease; cursor: pointer; font-family: inherit; }
+    input, select { font-family: inherit; }
+    .phase-banner { background: var(--gold); color: var(--navy); padding: 10px 22px; display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; text-align: center; font-size: 14px; line-height: 1.4; }
+    .phase-banner strong { background: var(--navy); color: #fff; letter-spacing: .14em; font-size: 13px; padding: 4px 10px; border-radius: var(--radius-sm); }
+    .err { color: var(--color-danger); font-size: 13px; margin: 6px 0 0; display: none; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 13px; z-index: 10000; display: none; }
+    .a-nav { display: flex; justify-content: space-between; align-items: baseline; max-width: 920px; margin: 0 auto; padding: 18px 22px; border-bottom: 1px solid var(--color-border); }
+    .a-brand { font-family: var(--font-serif); font-size: 1.25rem; color: var(--navy); font-weight: 700; }
+    .a-brand small { display: block; font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--color-text-muted); letter-spacing: .06em; text-transform: uppercase; }
+    .a-hero { max-width: 640px; margin: 0 auto; padding: 48px 22px 40px; }
+    .a-hero h1 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--navy); line-height: 1.25; margin: 0 0 12px; }
+    .a-hero > p { color: var(--color-text-muted); margin: 0 0 24px; line-height: 1.55; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--navy); }
+    .field input, .field select { border: 1px solid var(--color-border); background: #fff; padding: 12px 14px; border-radius: var(--radius-md); font-size: 16px; width: 100%; }
+    .field input:focus, .field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn-navy { background: var(--navy); color: #fff; border: 0; padding: 12px 18px; border-radius: var(--radius-md); font-weight: 600; font-size: 15px; width: 100%; }
+    .btn-navy:hover { background: var(--navy-deep); }
+    .btn-gold { background: var(--gold); color: var(--navy); width: auto; }
+    .btn-gold:hover { background: #bb9d5c; }
+    .link-btn { background: none; border: 0; padding: 0; color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; font-size: 14px; }
+    .link-btn:hover { color: var(--gold); }
+    .group-label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--navy); margin: 10px 0 4px; }
+    .group-hint { font-size: 13px; color: var(--color-text-muted); margin: 0 0 10px; }
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 0 0 18px; }
+    .check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+    .check input { margin-top: 3px; accent-color: var(--navy); }
+    .pill-radio { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+    .pill-radio label { border: 1px solid var(--color-border); background: #fff; padding: 8px 14px; border-radius: var(--radius-full); font-size: 14px; cursor: pointer; transition: all 0.15s ease; }
+    .pill-radio label:hover { border-color: var(--navy); }
+    .pill-radio label:has(input:checked) { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pill-radio input { position: absolute; opacity: 0; pointer-events: none; }
+    .consent { font-size: 13px; color: var(--color-text-muted); display: flex; gap: 8px; align-items: flex-start; margin: 4px 0 6px; line-height: 1.5; }
+    .consent input { margin-top: 3px; accent-color: var(--navy); }
+    .fine { font-size: 12px; color: var(--color-text-muted); margin: 10px 0 0; line-height: 1.5; }
+    .get-card { background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 18px; margin: 0 0 28px; }
+    .get-card h2 { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); margin: 0 0 8px; }
+    .get-card ul { margin: 0 0 10px; padding-left: 18px; font-size: 14px; line-height: 1.7; }
+    .turnstile { border: 1px dashed var(--color-border); border-radius: var(--radius-md); padding: 12px 14px; font-size: 13px; color: var(--color-text-muted); margin: 10px 0 14px; display: flex; gap: 10px; align-items: center; background: #fff; }
+    .turnstile i { width: 18px; height: 18px; border: 2px solid var(--color-success); border-radius: 4px; display: inline-block; }
+    .code-input { letter-spacing: .4em; font-size: 22px !important; text-align: center; }
+    .note-box { background: var(--stone); border-radius: var(--radius-md); padding: 12px 14px; font-size: 14px; line-height: 1.5; margin: 0 0 20px; }
+    .joel-card { background: var(--navy); color: #e8e4dc; padding: 22px; border-radius: var(--radius-lg); margin: 0 0 28px; display: grid; grid-template-columns: 88px 1fr; gap: 18px; align-items: start; }
+    .joel-card img { width: 88px; height: 88px; object-fit: cover; object-position: top center; border-radius: 50%; border: 2px solid var(--gold); background: #14304f; }
+    .joel-card h3 { font-family: var(--font-serif); font-weight: 400; margin: 0 0 8px; color: #fff; font-size: 1.4rem; }
+    .joel-meta { font-size: 12px; color: var(--gold); margin: -4px 0 10px; letter-spacing: .04em; }
+    .joel-heard { font-size: 13px; color: #e8e4dc; background: rgba(255,255,255,.07); padding: 10px 12px; border-radius: 8px; margin: 0 0 14px; line-height: 1.5; }
+    .joel-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 14px; }
+    .joel-contact span { font-size: 14px; color: #fff; }
+    .joel-contact a { color: #fff; border: 1px solid rgba(255,255,255,.35); padding: 8px 12px; border-radius: var(--radius-md); font-size: 14px; text-decoration: none; transition: all 0.15s ease; }
+    .joel-contact a:hover { border-color: var(--gold); color: var(--gold); }
+    .timeline { list-style: none; margin: 0; padding: 0; }
+    .timeline li { position: relative; padding: 0 0 16px 30px; font-size: 14px; line-height: 1.5; color: #e8e4dc; }
+    .timeline li::before { content: ""; position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); }
+    .timeline li.done::before { background: var(--gold); border-color: var(--gold); }
+    .timeline li.now::before { border-color: var(--gold); }
+    .timeline li strong { color: #fff; display: block; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 28px 22px 80px; }
+    .section { margin: 36px 0 0; padding-top: 24px; border-top: 1px solid var(--color-border); }
+    .section h2, .wrap h2.serif { font-family: var(--font-serif); color: var(--navy); font-weight: 400; margin: 0 0 8px; }
+    .section > p { margin: 0 0 14px; line-height: 1.55; }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .ledger { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+    .ledger td { padding: 9px 0; border-bottom: 1px solid var(--color-border); }
+    .ledger td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .ledger tr.total td { font-weight: 700; color: var(--navy); border-bottom: 0; padding-top: 12px; font-size: 16px; }
+    .calc-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .calc-pair h3 { font-family: var(--font-serif); font-weight: 400; color: var(--navy); margin: 0 0 6px; font-size: 1.15rem; }
+    .calc-pair p { font-size: 14px; line-height: 1.5; margin: 0 0 12px; color: var(--color-text-muted); }
+    .sample-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin: 0 0 6px; }
+    .stamp { display: inline-block; border: 2px solid var(--gold); color: var(--gold); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 10px; font-weight: 700; }
+    .sample-frame { border: 2px dashed rgba(168,138,75,.55); border-radius: var(--radius-lg); padding: 22px; background: #fbfaf8; }
+    .range { font-family: var(--font-serif); font-size: 2.2rem; color: var(--navy); margin: 8px 0 4px; }
+    .a-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+    .a-stat { background: #fff; border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md); }
+    .a-stat span { display: block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 4px; }
+    .a-stat strong { font-size: 1.15rem; color: var(--navy); }
+    .a-map { height: 240px; margin: 16px 0 8px; border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--stone); }
+    #s-leaflet { width: 100%; height: 100%; }
+    .scatter { background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 8px; margin: 14px 0 6px; }
+    .scatter svg { width: 100%; height: auto; display: block; }
+    .table-scroll { overflow-x: auto; }
+    .a-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+    .a-table th, .a-table td { text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    .a-table th { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+    .a-table a { color: var(--navy); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .a-table a:hover { color: var(--gold); }
+    .a-table td.small { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; }
+    .a-table td.note { font-size: 13px; color: var(--navy); line-height: 1.45; min-width: 180px; }
+    .joel-letter { background: #fff; border-left: 3px solid var(--gold); padding: 14px 16px; font-size: 14px; line-height: 1.6; margin: 18px 0 0; }
+    .alert-box { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .alert-box p { margin: 4px 0 0; font-size: 14px; color: var(--color-text-muted); }
+    .behind { border: 1px dashed #888; border-radius: 8px; padding: 12px 14px; margin: 36px 0 0; font-family: system-ui; font-size: 12px; color: #444; background: #fff; }
+    .behind strong { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .behind code { font-size: 12px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .badge.unconfirmed { background: #f3e3c3; color: #7a5a14; }
+    .badge.confirmed { background: #d7ebdf; color: #1f5a3b; }
+    @media (max-width: 760px) {
+      .check-grid, .calc-grid, .calc-pair, .field-row { grid-template-columns: 1fr; }
+      .a-stats { grid-template-columns: 1fr 1fr; }
+      .joel-card { grid-template-columns: 64px 1fr; }
+      .joel-card img { width: 64px; height: 64px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phase-banner" role="note"><strong>PHASE 1</strong><span>Joel’s review by email. No live data: the report below is a sample.</span></div>
+
+  <div class="a-nav">
+    <div class="a-brand"><a href="/" style="color:inherit;text-decoration:none">Sodeman Realty</a><small>Greater Lansing · preview</small></div>
+  </div>
+
+  <!-- Step 1: the house -->
+  <div id="view-details" class="a-hero">
+    <h1>Get my read on what your house is worth.</h1>
+    <p>Tell me about the house. I’ll pick the comparable sales myself, adjust for the details public records miss, and email you a market analysis within one business day.</p>
+    <div class="get-card">
+      <h2>What you’ll get</h2>
+      <ul>
+        <li>Recent nearby sales I pick myself, not an algorithm</li>
+        <li>A price range adjusted for your updates and condition</li>
+        <li>Your estimated net and what your buyer’s taxes will be</li>
+      </ul>
+      <button class="link-btn" type="button" data-jump="sample">See a sample report</button>
+    </div>
+    <form id="f-details">
+      <div class="field">
+        <label for="d-address">Property address</label>
+        <input id="d-address" autocomplete="street-address" placeholder="1847 Holbrook Dr, East Lansing, MI" required />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="d-beds">Bedrooms</label>
+          <select id="d-beds" required>
+            <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="d-baths">Bathrooms</label>
+          <select id="d-baths" required>
+            <option value="1">1</option><option value="1.5">1.5</option><option value="2" selected>2</option>
+            <option value="2.5">2.5</option><option value="3">3</option><option value="3.5">3.5</option><option value="4">4+</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="d-sqft">Approximate Sq Ft</label>
+        <input id="d-sqft" type="number" min="400" max="8000" value="1620" required />
+      </div>
+      <p class="group-label">What only you know about the house</p>
+      <p class="group-hint">Optional. These change which sales I compare you to and how I adjust them.</p>
+      <div class="check-grid">
+        <label class="check"><input type="checkbox" name="cond" value="Updated kitchen" /> Updated kitchen</label>
+        <label class="check"><input type="checkbox" name="cond" value="Updated bathrooms" /> Updated bathrooms</label>
+        <label class="check"><input type="checkbox" name="cond" value="Finished basement" /> Finished basement</label>
+        <label class="check"><input type="checkbox" name="cond" value="Roof under 10 years old" /> Roof under 10 years old</label>
+        <label class="check"><input type="checkbox" name="cond" value="New furnace or AC" /> New furnace or AC</label>
+        <label class="check"><input type="checkbox" name="cond" value="Other" id="d-other" /> Something else</label>
+      </div>
+      <div class="field" id="d-other-field" hidden>
+        <label for="d-other-text">What else should I know?</label>
+        <input id="d-other-text" maxlength="200" placeholder="Roof is 25 years old, new windows, big fenced yard" />
+      </div>
+      <p class="group-label">What are you thinking about?</p>
+      <div class="pill-radio" id="d-intent">
+        <label><input type="radio" name="intent" value="sell" checked /><span>Selling</span></label>
+        <label><input type="radio" name="intent" value="rent" /><span>Renting it out</span></label>
+        <label><input type="radio" name="intent" value="refi" /><span>Refinancing</span></label>
+        <label><input type="radio" name="intent" value="curious" /><span>Just curious</span></label>
+      </div>
+      <div class="field" id="d-timeline-field">
+        <label for="d-timeline">Timeline</label>
+        <select id="d-timeline">
+          <option value="in the next 3 months">In the next 3 months</option>
+          <option value="in 3 to 6 months" selected>In 3 to 6 months</option>
+          <option value="in 6 to 12 months">In 6 to 12 months</option>
+          <option value="more than a year out">More than a year out</option>
+          <option value="sometime, timing open">Not sure yet</option>
+        </select>
+      </div>
+      <button class="btn-navy" type="submit">Continue</button>
+    </form>
+  </div>
+
+  <!-- Step 2: contact -->
+  <div id="view-contact" class="a-hero" hidden>
+    <h1>Where should I send it?</h1>
+    <p>Your analysis comes by email. I may call first if I have a question about the house.</p>
+    <form id="f-contact">
+      <div class="field"><label for="c-name">Name</label><input id="c-name" autocomplete="name" required /></div>
+      <div class="field"><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email" required /></div>
+      <div class="field"><label for="c-phone">Mobile phone</label><input id="c-phone" type="tel" autocomplete="tel" required placeholder="517-555-0142" /></div>
+      <label class="consent"><input type="checkbox" id="c-consent" /> <span>Joel Sodeman may call or text me at this number about this request. (Placeholder copy. Needs legal review.)</span></label>
+      <p class="err" id="c-consent-err">Check the box so I can reach you.</p>
+      <div class="turnstile"><i></i> Spam check (added at launch)</div>
+      <button class="btn-navy" type="submit">Send it to me</button>
+      <p class="fine">Your details come to me only. They aren’t sold or shared. <button class="link-btn" type="button" data-jump="details" style="font-size:12px">Back</button></p>
+    </form>
+  </div>
+
+  <!-- Step 3: check email -->
+  <div id="view-check" class="a-hero" hidden>
+    <h1>Check your email.</h1>
+    <p>I just sent a 6-digit code to <strong id="k-email">your email</strong>. In this preview, use code <code>123456</code>.</p>
+    <div class="note-box">I already have your request. Confirming your email tells me it’s really you and that my analysis will reach you.</div>
+    <form id="f-check">
+      <div class="field"><label for="k-code">Code</label><input id="k-code" class="code-input" inputmode="numeric" maxlength="6" autocomplete="one-time-code" /></div>
+      <p class="err" id="k-err">That code didn’t match. Use 123456 in this preview.</p>
+      <button class="btn-navy" type="submit">Confirm my email</button>
+    </form>
+    <p class="fine">No email? Check spam, or <button class="link-btn" type="button" data-toast="Preview: a new code was sent." style="font-size:12px">send a new code</button>. Wrong address? <button class="link-btn" type="button" data-jump="contact" style="font-size:12px">Fix it</button></p>
+    <div class="behind" id="behind-check">
+      <strong>Preview note: what Joel receives right now</strong>
+      <p style="margin:6px 0 0">New request <span class="badge unconfirmed">Email unconfirmed</span> · <span class="lead-summary"></span></p>
+    </div>
+  </div>
+
+  <!-- Step 4: confirmed -->
+  <div id="view-done" class="wrap" hidden>
+    <div class="joel-card">
+      <img src="/assets/img/joel-headshot.jpg" alt="Joel Sodeman" width="88" height="88" />
+      <div>
+        <h3>Got it. I’m on it.</h3>
+        <p class="joel-meta">Joel Sodeman · Broker</p>
+        <p class="joel-heard" id="j-heard">You told me: no updates or repairs flagged.</p>
+        <ul class="timeline">
+          <li class="done"><strong>Request received</strong>Your house details are with me.</li>
+          <li class="done"><strong>Email confirmed</strong><span id="j-email"></span></li>
+          <li class="now"><strong>I review your house</strong>I pick the comps and may call with a question about updates. Within one business day.</li>
+          <li><strong>Your analysis arrives by email</strong>The sales I picked, how I adjusted them, and my range.</li>
+        </ul>
+        <div class="joel-contact">
+          <span>Call or text me at 517-898-6412</span>
+          <a id="j-mail" href="mailto:joel@sodemanrealty.com?subject=My%20home%20value%20request">Email me</a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="serif">While you wait: two numbers sellers often miss</h2>
+    <p style="margin:0 0 16px;color:var(--color-text-muted);font-size:14px">Type a price you have in mind. My analysis will give you a better one.</p>
+    <div class="field" style="max-width:280px">
+      <label for="x-price">Price to test</label>
+      <input id="x-price" type="number" min="0" step="1000" placeholder="280000" />
+    </div>
+    <div class="calc-pair">
+      <div>
+        <h3>Your buyer’s property taxes</h3>
+        <p>Under Michigan’s Proposal A, taxable value uncaps when a house sells. Your buyer’s bill resets to about half of the price times the millage, which is often well above yours.</p>
+        <div class="field-row">
+          <div class="field"><label for="x-tax">Your tax today (per year)</label><input id="x-tax" type="number" min="0" step="100" value="3900" /></div>
+          <div class="field"><label for="x-mills">Millage (mills)</label><input id="x-mills" type="number" min="0" step="0.5" value="42" /></div>
+        </div>
+        <table class="ledger">
+          <tr><td>Your taxes today</td><td id="x-tax-out">$3,900</td></tr>
+          <tr><td>Buyer’s estimated first full year</td><td id="x-tax-buyer">Enter a price</td></tr>
+          <tr class="total"><td>Difference per month</td><td id="x-tax-diff">Enter a price</td></tr>
+        </table>
+        <p class="fine">Sample homestead millage. I’ll confirm the real rate for your address.</p>
+      </div>
+      <div>
+        <h3>What you might walk away with</h3>
+        <p>Sellers decide on the net, not the sale price. A rough net at your test price.</p>
+        <div class="field-row">
+          <div class="field"><label for="x-payoff">Mortgage payoff</label><input id="x-payoff" type="number" min="0" step="1000" value="0" /></div>
+          <div class="field"><label for="x-comm">Commission % (negotiable)</label><input id="x-comm" type="number" min="0" max="10" step="0.25" value="5" /></div>
+        </div>
+        <table class="ledger">
+          <tr><td>Commission</td><td id="x-net-comm">Enter a price</td></tr>
+          <tr><td>Michigan transfer tax (state and county)</td><td id="x-net-transfer">Enter a price</td></tr>
+          <tr><td>Title and closing (about 1%)</td><td id="x-net-closing">Enter a price</td></tr>
+          <tr><td>Mortgage payoff</td><td id="x-net-payoff">$0</td></tr>
+          <tr class="total"><td>Estimated net</td><td id="x-net-total">Enter a price</td></tr>
+        </table>
+        <p class="fine">Transfer tax: $3.75 state plus $0.55 county per $500. Some sellers qualify for an exemption. I’ll check yours.</p>
+      </div>
+    </div>
+
+    <div class="section alert-box">
+      <div>
+        <h2 style="margin:0">Want to know when a house like yours sells?</h2>
+        <p>I can set up an MLS alert for sales near you. Email only, and you can stop it anytime.</p>
+      </div>
+      <button class="btn-navy" type="button" id="x-alert" style="width:auto">Yes, set it up</button>
+    </div>
+
+    <div class="section" id="done-sample-slot">
+      <h2>Here’s what my analysis looks like</h2>
+      <p>This is a sample for a different house. Yours will use sales I pick for your address.</p>
+    </div>
+
+    <div class="behind">
+      <strong>Preview note: what Joel receives now</strong>
+      <p style="margin:6px 0 0">Same request, updated <span class="badge confirmed">Email confirmed</span> · <span class="lead-summary"></span></p>
+    </div>
+  </div>
+
+  <!-- Sample report view (from step 1 link) -->
+  <div id="view-sample" class="wrap" hidden>
+    <p style="margin:0 0 18px"><button class="link-btn" type="button" id="sample-back">← Back to your request</button></p>
+    <h2 class="serif" style="font-size:1.8rem">A sample of my analysis</h2>
+    <p style="margin:0 0 20px;color:var(--color-text-muted)">This is what lands in your inbox. Sample house and sample sales.</p>
+    <div id="sample-home-slot"></div>
+    <div style="margin-top:28px"><button class="btn-navy" type="button" data-jump="details" style="width:auto">Request mine</button></div>
+  </div>
+
+  <!-- The one sample report, moved between slots -->
+  <div id="sample-report" class="sample-frame" hidden>
+    <div class="sample-head">
+      <span class="stamp">Sample house</span>
+      <span style="font-size:13px;color:var(--color-text-muted)">Prepared by Joel Sodeman, Broker</span>
+    </div>
+    <p style="margin:10px 0 0;color:var(--color-text-muted);font-size:14px">1847 Holbrook Dr, East Lansing · 3 bed · 2 bath · 1,620 sq ft · updated kitchen</p>
+    <div class="range" id="s-range">$251,000 to $301,000</div>
+    <p style="margin:0;font-size:14px;color:var(--color-text-muted)" id="s-mid">My suggested list price: $289,000</p>
+    <div class="a-stats">
+      <div class="a-stat"><span>Price per sq ft</span><strong id="s-ppsf">$174</strong></div>
+      <div class="a-stat"><span>Price change, last 12 months</span><strong>+2.4%</strong></div>
+      <div class="a-stat"><span>Days on market nearby</span><strong id="s-dom">27</strong></div>
+      <div class="a-stat"><span>Sales I used</span><strong>4</strong></div>
+    </div>
+    <div class="a-map"><div id="s-leaflet" role="img" aria-label="Map of the sample house and four comparable sales"></div></div>
+    <div class="scatter"><svg id="s-scatter" viewBox="0 0 600 290" role="img" aria-label="Sold price by square feet for four sample sales"></svg></div>
+    <p class="fine" style="margin-top:0">Gold dots are the sales I picked. The shaded bar is the range.</p>
+    <h3 style="font-family:var(--font-serif);font-weight:400;color:var(--navy);margin:24px 0 4px">The sales I picked, and why</h3>
+    <div class="table-scroll">
+      <table class="a-table">
+        <thead><tr><th>Sold</th><th>Date</th><th>Beds / baths</th><th>Sq ft</th><th>Sold price</th><th>Adjustments</th><th>Adjusted</th><th>My note</th></tr></thead>
+        <tbody id="s-comps"></tbody>
+      </table>
+    </div>
+    <div class="joel-letter"><strong>My take:</strong> The updated kitchen puts this house closer to Sunset than Beech. I’d list at $289,000, expect showings in the first two weeks, and hold firm unless inspection turns up the roof. Your buyer’s taxes will run about $180 a month more than yours, so expect that to come up in negotiation.</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const toastEl = $('toast');
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.style.display = 'block';
+      setTimeout(() => { toastEl.style.display = 'none'; }, 2400);
+    }
+    document.addEventListener('click', e => {
+      const t = e.target.closest('[data-toast]');
+      if (t) toast(t.getAttribute('data-toast'));
+      const j = e.target.closest('[data-jump]');
+      if (j) show(j.getAttribute('data-jump'));
+    });
+
+    const COMP_DIR = 'comps/';
+    const SUBJECT = { beds: 3, baths: 2, sqft: 1620, lat: 42.7369, lng: -84.4837 };
+    const COMPS = [
+      { addr: '412 Albert Ave', href: '412-albert-ave.html', date: 'Mar 2026', beds: 3, baths: 1.5, sqft: 1540, price: 289000, dom: 11, lat: 42.7384, lng: -84.4812, note: 'Closest match. Similar kitchen update.' },
+      { addr: '920 Sunset Ln', href: '920-sunset-ln.html', date: 'Jan 2026', beds: 3, baths: 2, sqft: 1710, price: 305500, dom: 22, lat: 42.7348, lng: -84.4865, note: 'Fully renovated. Treat as the ceiling.' },
+      { addr: '77 Beech St', href: '77-beech-st.html', date: 'Nov 2025', beds: 4, baths: 2, sqft: 1820, price: 271000, dom: 34, lat: 42.7396, lng: -84.4878, note: 'Dated kitchen, older sale. Weighted less.' },
+      { addr: '210 Kedzie Ct', href: '210-kedzie-ct.html', date: 'Sep 2025', beds: 3, baths: 1, sqft: 1380, price: 258000, dom: 41, lat: 42.7335, lng: -84.4799, note: 'Needed a roof. The floor of the range.' }
+    ];
+    const ADJ = { sqft: 60, bed: 8000, bath: 7500 };
+    const TRANSFER_PER_500 = 3.75 + 0.55;
+    const NAVY = '#0B1F3A', GOLD = '#A88A4B', MUTED = '#5b5b5b', GRID = 'rgba(11,31,58,.12)';
+    const money = n => '$' + Math.round(n).toLocaleString();
+    const signed = n => (n < 0 ? '−' : '+') + money(Math.abs(n));
+
+    const VIEWS = ['details', 'contact', 'check', 'done', 'sample'];
+    let lastFormView = 'details';
+    function show(name) {
+      if (name !== 'sample') lastFormView = name;
+      VIEWS.forEach(v => { $('view-' + v).hidden = v !== name; });
+      if (name === 'check' || name === 'done') fillLead();
+      if (name === 'done') placeSample('done-sample-slot');
+      if (name === 'sample') placeSample('sample-home-slot');
+      window.scrollTo(0, 0);
+    }
+    $('sample-back').addEventListener('click', () => show(lastFormView));
+
+    function adjust(c) {
+      const parts = [];
+      let total = 0;
+      const size = (SUBJECT.sqft - c.sqft) * ADJ.sqft;
+      if (size) { total += size; parts.push(signed(size) + ' size'); }
+      const bed = (SUBJECT.beds - c.beds) * ADJ.bed;
+      if (bed) { total += bed; parts.push(signed(bed) + ' bedroom'); }
+      const bath = (SUBJECT.baths - c.baths) * ADJ.bath;
+      if (bath) { total += bath; parts.push(signed(bath) + ' baths'); }
+      return { parts, adjusted: c.price + total };
+    }
+    const ROWS = COMPS.map(c => Object.assign({}, c, adjust(c)));
+    const LOW = Math.floor(Math.min(...ROWS.map(r => r.adjusted)) / 1000) * 1000;
+    const HIGH = Math.ceil(Math.max(...ROWS.map(r => r.adjusted)) / 1000) * 1000;
+    const LIST = 289000;
+
+    function renderSample() {
+      $('s-range').textContent = money(LOW) + ' to ' + money(HIGH);
+      $('s-mid').textContent = 'My suggested list price: ' + money(LIST);
+      $('s-ppsf').textContent = money(LIST / SUBJECT.sqft);
+      $('s-dom').textContent = Math.round(COMPS.reduce((a, c) => a + c.dom, 0) / COMPS.length);
+      $('s-comps').innerHTML = ROWS.map(r =>
+        '<tr><td><a href="' + COMP_DIR + r.href + '">' + r.addr + '</a></td><td>' + r.date + '</td>' +
+        '<td>' + r.beds + ' / ' + r.baths + '</td><td>' + r.sqft.toLocaleString() + '</td><td>' + money(r.price) + '</td>' +
+        '<td class="small">' + (r.parts.join('<br>') || 'None') + '</td><td><strong>' + money(r.adjusted) + '</strong></td>' +
+        '<td class="note">' + r.note + '</td></tr>').join('');
+      renderScatter();
+    }
+    function renderScatter() {
+      const W = 600, H = 290, L = 72, R = 24, T = 18, B = 52;
+      const x0 = 1200, x1 = 2000, y0 = 240000, y1 = 320000;
+      const sx = v => L + (v - x0) / (x1 - x0) * (W - L - R);
+      const sy = v => H - B - (v - y0) / (y1 - y0) * (H - T - B);
+      let g = '';
+      for (let v = y0; v <= y1; v += 20000) {
+        g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + sy(v) + '" y2="' + sy(v) + '" stroke="' + GRID + '"/>';
+        g += '<text x="' + (L - 8) + '" y="' + (sy(v) + 4) + '" text-anchor="end" font-size="11" fill="' + MUTED + '">$' + (v / 1000) + 'k</text>';
+      }
+      for (let v = x0; v <= x1; v += 200) {
+        g += '<text x="' + sx(v) + '" y="' + (H - B + 18) + '" text-anchor="middle" font-size="11" fill="' + MUTED + '">' + v.toLocaleString() + '</text>';
+      }
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" stroke="' + MUTED + '"/>';
+      g += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="12" fill="' + NAVY + '">Approximate sq ft</text>';
+      g += '<text transform="translate(16 ' + ((T + H - B) / 2) + ') rotate(-90)" text-anchor="middle" font-size="12" fill="' + NAVY + '">Sold price</text>';
+      const bx = sx(SUBJECT.sqft);
+      g += '<rect x="' + (bx - 7) + '" y="' + sy(HIGH) + '" width="14" height="' + (sy(LOW) - sy(HIGH)) + '" rx="3" fill="' + NAVY + '" opacity=".18"/>';
+      g += '<circle cx="' + bx + '" cy="' + sy(LIST) + '" r="7" fill="' + NAVY + '" stroke="' + GOLD + '" stroke-width="2"/>';
+      g += '<text x="' + (bx + 12) + '" y="' + (sy(LIST) + 4) + '" font-size="12" font-weight="600" fill="' + NAVY + '">Sample house</text>';
+      ROWS.forEach(r => {
+        g += '<a href="' + COMP_DIR + r.href + '"><circle cx="' + sx(r.sqft) + '" cy="' + sy(r.price) + '" r="6" fill="' + GOLD + '" stroke="' + NAVY + '" stroke-width="1.5"/>';
+        g += '<text x="' + sx(r.sqft) + '" y="' + (sy(r.price) - 10) + '" text-anchor="middle" font-size="11" fill="' + NAVY + '">' + r.addr.replace(/ (Ave|Ln|St|Ct)$/, '') + '</text></a>';
+      });
+      $('s-scatter').innerHTML = g;
+    }
+
+    let map = null;
+    function placeSample(slotId) {
+      const node = $('sample-report');
+      $(slotId).appendChild(node);
+      node.hidden = false;
+      if (typeof L === 'undefined') return;
+      if (!map) {
+        map = L.map('s-leaflet', { scrollWheelZoom: false }).setView([SUBJECT.lat, SUBJECT.lng], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+        L.circleMarker([SUBJECT.lat, SUBJECT.lng], { radius: 9, color: GOLD, fillColor: NAVY, fillOpacity: 1, weight: 2 }).addTo(map).bindPopup('<strong>Sample house</strong>');
+        COMPS.forEach(c => L.circleMarker([c.lat, c.lng], { radius: 7, color: NAVY, fillColor: GOLD, fillOpacity: .95, weight: 2 })
+          .addTo(map).bindPopup('<a href="' + COMP_DIR + c.href + '">' + c.addr + '</a>'));
+      }
+      setTimeout(() => map.invalidateSize(), 60);
+    }
+
+    function selectedConds() {
+      return [...document.querySelectorAll('input[name="cond"]:checked')]
+        .map(i => i.value === 'Other' ? $('d-other-text').value.trim().replace(/\.$/, '') : i.value)
+        .filter(Boolean);
+    }
+    $('d-other').addEventListener('change', e => {
+      $('d-other-field').hidden = !e.target.checked;
+      if (e.target.checked) $('d-other-text').focus();
+    });
+    function selectedIntent() { return document.querySelector('input[name="intent"]:checked').value; }
+    function heardLine() {
+      const conds = selectedConds();
+      const t = $('d-timeline').value;
+      const intent = { sell: 'Selling ' + t + '.', rent: 'Thinking about renting it out, ' + t + '.', refi: 'Refinancing.', curious: 'Just curious for now.' }[selectedIntent()];
+      return 'You told me: ' + $('d-beds').selectedOptions[0].text + ' bed, ' + $('d-baths').selectedOptions[0].text + ' bath, about ' +
+        Number($('d-sqft').value || 0).toLocaleString() + ' sq ft. ' +
+        (conds.length ? conds[0] + (conds.length > 1 ? ', ' + conds.slice(1).join(', ').toLowerCase() : '') + '. ' : 'No updates or repairs flagged. ') + intent;
+    }
+    function fillLead() {
+      const addr = $('d-address').value || '1847 Holbrook Dr, East Lansing';
+      $('k-email').textContent = $('c-email').value;
+      $('j-email').textContent = $('c-email').value;
+      $('j-heard').textContent = heardLine();
+      $('j-mail').href = 'mailto:joel@sodemanrealty.com?subject=' + encodeURIComponent('My home value request: ' + addr);
+      const summary = $('c-name').value + ' · ' + $('c-phone').value + ' · ' + $('c-email').value + ' · ' + addr + ' · ' + heardLine().replace('You told me: ', '');
+      document.querySelectorAll('.lead-summary').forEach(s => { s.textContent = summary; });
+    }
+
+    document.querySelectorAll('#d-intent input').forEach(r => r.addEventListener('change', () => {
+      const v = selectedIntent();
+      $('d-timeline-field').hidden = v === 'refi' || v === 'curious';
+    }));
+    $('f-details').addEventListener('submit', e => { e.preventDefault(); show('contact'); });
+    $('f-contact').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!$('c-consent').checked) { $('c-consent-err').style.display = 'block'; return; }
+      $('c-consent-err').style.display = 'none';
+      show('check');
+      toast('Preview: Joel was notified. Code sent to ' + $('c-email').value + '.');
+    });
+    $('f-check').addEventListener('submit', e => {
+      e.preventDefault();
+      if ($('k-code').value.trim() !== '123456') { $('k-err').style.display = 'block'; return; }
+      $('k-err').style.display = 'none';
+      show('done');
+    });
+
+    function renderCalcs() {
+      const price = parseFloat($('x-price').value) || 0;
+      const tax = parseFloat($('x-tax').value) || 0;
+      const mills = parseFloat($('x-mills').value) || 0;
+      const pct = parseFloat($('x-comm').value) || 0;
+      const payoff = parseFloat($('x-payoff').value) || 0;
+      $('x-tax-out').textContent = money(tax);
+      $('x-net-payoff').textContent = payoff ? signed(-payoff) : '$0';
+      const ids = ['x-tax-buyer', 'x-tax-diff', 'x-net-comm', 'x-net-transfer', 'x-net-closing', 'x-net-total'];
+      if (!price) { ids.forEach(id => { $(id).textContent = 'Enter a price'; }); return; }
+      const buyer = price * 0.5 * mills / 1000;
+      $('x-tax-buyer').textContent = money(buyer);
+      $('x-tax-diff').textContent = signed((buyer - tax) / 12) + ' per month';
+      const comm = price * pct / 100;
+      const transfer = Math.ceil(price / 500) * TRANSFER_PER_500;
+      const closing = price * 0.01;
+      $('x-net-comm').textContent = signed(-comm);
+      $('x-net-transfer').textContent = signed(-transfer);
+      $('x-net-closing').textContent = signed(-closing);
+      $('x-net-total').textContent = money(price - comm - transfer - closing - payoff);
+    }
+    ['x-price', 'x-tax', 'x-mills', 'x-comm', 'x-payoff'].forEach(id => $(id).addEventListener('input', renderCalcs));
+    $('x-alert').addEventListener('click', e => {
+      e.currentTarget.textContent = 'I’ll set it up';
+      e.currentTarget.disabled = true;
+      toast('Preview: added to Joel’s request as “wants sold alerts.”');
+    });
+
+    renderSample();
+  </script>
+</body>
+</html>
