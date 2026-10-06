@@ -37,8 +37,8 @@ Last updated: 2026-10-02
 
 ## Social proof
 
-- [ ] Real client testimonials with written permission + preferred attribution (name, city)
-- [ ] Google / Zillow / Realtor.com review profile URLs to link
+- [ ] Real client testimonials with written permission + preferred attribution (name, city). **Interim (2026-10-06):** six verbatim Zillow review excerpts are live in `docs/src/_data/reviews.json`, reviewer names omitted. Confirm Joel is OK quoting them.
+- [ ] Google / Zillow / Realtor.com review profile URLs to link. Zillow `soldbysoda` (5.0, 49 reviews) is linked. No Google Business Profile found for Sodeman Realty; recommend Joel create one.
 - [ ] Case-study outlines (anonymous OK): first-home win, investment purchase, negotiation save
 
 ## Brand & assets
@@ -46,7 +46,7 @@ Last updated: 2026-10-02
 - [ ] Final logo usage (color variants, clear space) and any brand guidelines
 - [ ] Headshot / cutout photo rights and preferred crop
 - [ ] Additional photography (Lansing neighborhoods, office, team if any)
-- [ ] Social profiles to link (Facebook, Instagram, LinkedIn, YouTube, etc.)
+- [ ] Social profiles to link (Facebook, Instagram, LinkedIn, YouTube, etc.). Scan 2026-10-06: Smith Sodeman Team Facebook and Instagram (RE/MAX era) are gone; LinkedIn `joel-sodeman-91118a100` still says RE/MAX; personal Facebook `joel.sodeman` exists. Ask whether Sodeman Realty has or wants business pages. Add confirmed URLs to `profiles` in `site.json`.
 - [ ] Favicon / app icon preference if different from logo mark
 
 ## Business growth (beyond the brochure site)

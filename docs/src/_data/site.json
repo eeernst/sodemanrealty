@@ -10,5 +10,8 @@
   "hero_headline": "Trusted guidance from search to close.",
   "hero_subheadline": "From first home to first investment, structured guidance built on trust.",
   "service_area": "Lansing, East Lansing, and surrounding Mid-Michigan communities",
-  "service_area_short": "Lansing & Mid-Michigan"
+  "service_area_short": "Lansing & Mid-Michigan",
+  "profiles": [
+    { "label": "Zillow reviews", "url": "https://www.zillow.com/profile/soldbysoda" }
+  ]
 }

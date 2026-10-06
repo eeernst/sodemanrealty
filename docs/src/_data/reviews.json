@@ -1,0 +1,58 @@
+{
+  "source": "zillow-public",
+  "source_note": "Verbatim excerpts from public client reviews on Joel Sodeman's Zillow agent profile (soldbysoda). Reviewer names omitted; attribution uses Zillow's transaction summary. Trim excerpts only; never reword.",
+  "profile_url": "https://www.zillow.com/profile/soldbysoda",
+  "captured": "2026-10-06",
+  "rating": "5.0",
+  "count": 49,
+  "items": [
+    {
+      "id": "9187379",
+      "quote": "He never once made me feel pressured to make a move and only provided a friendly guiding hand throughout all of this process.",
+      "context": "Bought and sold in Averill Woods, Lansing",
+      "year": 2026,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=9187379",
+      "featured": true
+    },
+    {
+      "id": "8829948",
+      "quote": "It was our first time buying a home and anything we didn't understand he explained in a way that made sense.",
+      "context": "First-time buyers, Lansing",
+      "year": 2025,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=8829948",
+      "featured": true
+    },
+    {
+      "id": "8435391",
+      "quote": "Joel was knowledgeable of the local market and helped me set a realistic but competitive price, that allowed us to find a buyer in less than a week.",
+      "context": "Sold a home",
+      "year": 2024,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=8435391",
+      "featured": true
+    },
+    {
+      "id": "8336992",
+      "quote": "We trusted his expertise through the process of selling our home and it paid off, literally. We got more for the home than anticipated due to his skill and help.",
+      "context": "Bought and sold in Lansing",
+      "year": 2024,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=8336992",
+      "featured": false
+    },
+    {
+      "id": "8530090",
+      "quote": "He helped us with cleaners, what repairs to make, what didn't matter and negotiated a great deal for us. Will use Joel anytime we need a realtor and highly recommend.",
+      "context": "Sold in Holt",
+      "year": 2024,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=8530090",
+      "featured": false
+    },
+    {
+      "id": "8005107",
+      "quote": "He was also able to provide a lot of good information and knowledge when walking through houses, pointing out potential issues we might encounter.",
+      "context": "Bought and sold in Groesbeck, Lansing",
+      "year": 2023,
+      "url": "https://www.zillow.com/profile/soldbysoda?rx=true&review=8005107",
+      "featured": false
+    }
+  ]
+}

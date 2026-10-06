@@ -79,6 +79,16 @@ description: Trusted guidance for first-time buyers and investment properties in
 </section>
 
 <section class="container section reveal">
+  <h2>What clients say</h2>
+  <p class="muted"><span class="rating-stars" aria-hidden="true">★★★★★</span> {{ reviews.rating }} rating across {{ reviews.count }} reviews on Zillow.</p>
+  {% set featuredOnly = true %}
+  {% include "reviews.njk" %}
+  <div style="margin-top:16px">
+    <a class="btn-outline" href="{{ reviews.profile_url }}" target="_blank" rel="noopener">Read all {{ reviews.count }} reviews</a>
+  </div>
+</section>
+
+<section class="container section reveal">
   <h2>How working together looks</h2>
   <p class="muted">A simple process designed for clarity under pressure.</p>
   {% include "process.njk" %}

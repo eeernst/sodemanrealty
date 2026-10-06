@@ -7,6 +7,13 @@
         <a href="tel:{{ site.phone_tel }}">{{ site.phone_display }}</a><br/>
         <a href="mailto:{{ site.email }}">{{ site.email }}</a><br/>
         <span class="muted">{{ site.service_area }}</span>
+        {% if site.profiles.length %}
+          <div class="profile-links">
+            {% for profile in site.profiles %}
+              <a href="{{ profile.url }}" target="_blank" rel="noopener">{{ profile.label }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
       <div class="muted">
         Equal Housing Opportunity.<br/>

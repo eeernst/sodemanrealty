@@ -51,4 +51,16 @@ description: Contact Joel Sodeman, Broker at Sodeman Realty.
       </div>
     {% endif %}
   </div>
+
+  {% if site.profiles.length %}
+    <div style="margin-top:28px">
+      <h2>Find Joel online</h2>
+      <p class="muted">Recent sales and {{ reviews.count }} client reviews ({{ reviews.rating }} average) are public on Zillow.</p>
+      <div class="cta">
+        {% for profile in site.profiles %}
+          <a class="btn-outline" href="{{ profile.url }}" target="_blank" rel="noopener">{{ profile.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 </section>

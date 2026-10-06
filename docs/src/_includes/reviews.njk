@@ -1,0 +1,14 @@
+<div class="testimonials">
+  {% for review in reviews.items %}
+    {% if not featuredOnly or review.featured %}
+      <figure class="quote">
+        <blockquote>“{{ review.quote }}”</blockquote>
+        <figcaption>
+          <span class="who">{{ review.context }}, {{ review.year }}</span>
+          <a class="quote-source" href="{{ review.url }}" target="_blank" rel="noopener">Zillow review</a>
+        </figcaption>
+      </figure>
+    {% endif %}
+  {% endfor %}
+</div>
+<p class="fineprint">Excerpts from public client reviews on Joel’s <a href="{{ reviews.profile_url }}" target="_blank" rel="noopener">Zillow profile</a>. Reviewer names omitted.</p>

@@ -27,6 +27,10 @@ description: About Joel Sodeman and Sodeman Realty in Lansing, Michigan.
     </div>
   </div>
 
+  <h2 style="margin-top:40px">In clients’ words</h2>
+  <p class="muted"><span class="rating-stars" aria-hidden="true">★★★★★</span> {{ reviews.rating }} rating across {{ reviews.count }} reviews on <a href="{{ reviews.profile_url }}" target="_blank" rel="noopener">Zillow</a>.</p>
+  {% include "reviews.njk" %}
+
   <div class="empty-panel" style="margin-top:22px">
     <h2 style="margin-top:0">Ready to talk through a plan?</h2>
     <p class="muted">Call, email, or book a consultation—no pressure pitch, just a clear next step.</p>
