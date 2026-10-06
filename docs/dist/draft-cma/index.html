@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Draft home value | Sodeman Realty</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    button, .btn { transition: all 0.15s ease; cursor: pointer; font-family: inherit; }
+    input { font-family: inherit; }
+    [hidden] { display: none !important; }
+    .err { color: var(--color-danger); font-size: 13px; margin-top: 6px; display: none; }
+    .toast {
+      position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%);
+      background: var(--navy); color: #fff; padding: 10px 16px; border-radius: 8px;
+      font-size: 13px; z-index: 10000; display: none;
+    }
+    .a-nav {
+      display: flex; justify-content: space-between; align-items: baseline;
+      max-width: 920px; margin: 0 auto; padding: 18px 22px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .a-brand { font-family: var(--font-serif); font-size: 1.25rem; color: var(--navy); font-weight: 700; }
+    .a-brand small { display: block; font-family: var(--font-sans); font-size: 11px; font-weight: 500; color: var(--color-text-muted); letter-spacing: .06em; text-transform: uppercase; }
+    .a-hero { max-width: 640px; margin: 0 auto; padding: 56px 22px 40px; }
+    .a-hero h1 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; color: var(--navy); line-height: 1.25; margin: 0 0 12px; }
+    .a-hero p { color: var(--color-text-muted); margin: 0 0 28px; }
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--navy); }
+    .field input, .field select {
+      border: 1px solid var(--color-border); background: #fff; padding: 12px 14px;
+      border-radius: var(--radius-md); font-size: 16px; width: 100%;
+    }
+    .field input:focus, .field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .field select { appearance: auto; }
+    .btn-navy {
+      background: var(--navy); color: #fff; border: 0; padding: 12px 18px;
+      border-radius: var(--radius-md); font-weight: 600; width: 100%;
+    }
+    .btn-navy:hover { background: var(--navy-deep); }
+    .a-draft {
+      max-width: 920px; margin: 0 auto; padding: 28px 22px 80px;
+    }
+    .stamp {
+      display: inline-block; border: 2px solid var(--gold); color: var(--gold);
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      padding: 4px 10px; font-weight: 700;
+    }
+    .range { font-family: var(--font-serif); font-size: 2.4rem; color: var(--navy); margin: 8px 0; }
+    .joel-card {
+      background: var(--navy); color: #e8e4dc; padding: 22px; border-radius: var(--radius-lg); margin: 0 0 28px;
+      display: grid; grid-template-columns: 88px 1fr; gap: 18px; align-items: start;
+    }
+    .joel-card img {
+      width: 88px; height: 88px; object-fit: cover; object-position: top center;
+      border-radius: 50%; border: 2px solid var(--gold); background: #14304f;
+    }
+    .joel-card h3 { font-family: var(--font-serif); font-weight: 400; margin: 0 0 8px; color: #fff; }
+    .joel-card .joel-meta { font-size: 12px; color: var(--gold); margin: -4px 0 10px; letter-spacing: .04em; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .a-mid { font-size: 14px; color: var(--color-text-muted); margin: 0 0 8px; }
+    .a-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0;
+    }
+    .a-stat {
+      background: #fff; border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);
+    }
+    .a-stat span { display: block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 4px; }
+    .a-stat strong { font-size: 1.15rem; color: var(--navy); }
+    .a-map {
+      height: 240px; margin: 16px 0 8px; border: 1px solid var(--color-border);
+      border-radius: var(--radius-md); overflow: hidden; background: var(--stone);
+    }
+    .a-map #a-leaflet { width: 100%; height: 100%; }
+    .a-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+    .a-table th, .a-table td { text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--color-border); }
+    .a-table th { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+    .a-table a { color: var(--navy); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .a-table a:hover { color: var(--gold); }
+    .table-scroll { overflow-x: auto; }
+    .a-table td.adj-cell { font-size: 12px; color: var(--color-text-muted); line-height: 1.5; }
+    .group-label { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--navy); margin: 10px 0 4px; }
+    .group-hint { font-size: 13px; color: var(--color-text-muted); margin: 0 0 10px; }
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin: 0 0 18px; }
+    .check { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; cursor: pointer; }
+    .check input { margin-top: 3px; accent-color: var(--navy); }
+    .pill-radio { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+    .pill-radio label {
+      border: 1px solid var(--color-border); background: #fff; padding: 8px 14px;
+      border-radius: var(--radius-full); font-size: 14px; cursor: pointer; transition: all 0.15s ease;
+    }
+    .pill-radio label:hover { border-color: var(--navy); }
+    .pill-radio label:has(input:checked) { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pill-radio input { position: absolute; opacity: 0; pointer-events: none; }
+    .why-text { font-size: 13px; color: var(--color-text-muted); margin: 0 0 18px; line-height: 1.5; }
+    .consent { font-size: 12px; color: var(--color-text-muted); display: flex; gap: 8px; align-items: flex-start; margin: 4px 0 14px; line-height: 1.5; }
+    .consent input { margin-top: 2px; accent-color: var(--navy); }
+    .joel-heard { font-size: 13px; color: #e8e4dc; background: rgba(255,255,255,.07); padding: 10px 12px; border-radius: 8px; margin: 0 0 14px; line-height: 1.5; }
+    .joel-promise { font-size: 14px; margin: 0 0 14px; }
+    .joel-promise strong { color: #fff; }
+    .joel-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 12px; }
+    .joel-contact span { font-size: 14px; color: #fff; }
+    .joel-contact a {
+      color: #fff; border: 1px solid rgba(255,255,255,.35); padding: 8px 12px;
+      border-radius: var(--radius-md); font-size: 14px; text-decoration: none; transition: all 0.15s ease;
+    }
+    .joel-contact a:hover { border-color: var(--gold); color: var(--gold); }
+    .scatter { background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 8px; margin: 20px 0 6px; }
+    .scatter svg { width: 100%; height: auto; display: block; }
+    .section { margin: 36px 0 0; padding-top: 24px; border-top: 1px solid var(--color-border); }
+    .section h2 { font-family: var(--font-serif); color: var(--navy); font-weight: 400; margin: 0 0 8px; }
+    .section > p { margin: 0 0 14px; line-height: 1.55; }
+    .cantsee-list { margin: 0; padding: 0; list-style: none; }
+    .cantsee-list li { padding: 10px 0; border-bottom: 1px solid var(--color-border); font-size: 14px; }
+    .cantsee-list li strong { color: var(--navy); }
+    .cantsee-list li.flagged strong::before { content: "You flagged: "; color: var(--gold); font-weight: 700; }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .ledger { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+    .ledger td { padding: 9px 0; border-bottom: 1px solid var(--color-border); }
+    .ledger td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .ledger tr.total td { font-weight: 700; color: var(--navy); border-bottom: 0; padding-top: 12px; font-size: 16px; }
+    .fine { font-size: 12px; color: var(--color-text-muted); margin: 10px 0 0; line-height: 1.5; }
+    .alert-box { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .alert-box p { margin: 4px 0 0; font-size: 14px; color: var(--color-text-muted); }
+    @media (max-width: 700px) {
+      .check-grid, .calc-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .a-stats { grid-template-columns: 1fr 1fr; }
+      .joel-card { grid-template-columns: 72px 1fr; }
+      .joel-card img { width: 72px; height: 72px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+    .a-brand a { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="a-nav">
+    <div class="a-brand"><a href="/">Sodeman Realty</a><small>Greater Lansing · preview</small></div>
+    <span class="stamp">Draft</span>
+  </div>
+  <div id="a-step-address" class="a-hero">
+    <h1>A draft market analysis for your house. Then I’ll tell you what I’d actually change.</h1>
+    <p>Not a Zestimate. Nearby solds, a range, and a follow-up from Joel. Preview with sample data.</p>
+    <form id="a-addr">
+      <div class="field">
+        <label for="a-address">Property address</label>
+        <input id="a-address" name="address" autocomplete="street-address" placeholder="1847 Holbrook Dr, East Lansing, MI" required />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="a-beds">Bedrooms</label>
+          <select id="a-beds" name="beds" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="a-baths">Bathrooms</label>
+          <select id="a-baths" name="baths" required>
+            <option value="1">1</option>
+            <option value="1.5">1.5</option>
+            <option value="2" selected>2</option>
+            <option value="2.5">2.5</option>
+            <option value="3">3</option>
+            <option value="3.5">3.5</option>
+            <option value="4">4+</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="a-sqft">Approximate Sq Ft</label>
+        <input id="a-sqft" name="sqft" type="number" min="400" max="8000" value="1620" required />
+      </div>
+      <p class="group-label">What a computer can’t see</p>
+      <p class="group-hint">Optional. These don’t change the draft number. Joel uses them in his review.</p>
+      <div class="check-grid">
+        <label class="check"><input type="checkbox" name="cond" value="Updated kitchen" /> Updated kitchen</label>
+        <label class="check"><input type="checkbox" name="cond" value="Updated bathrooms" /> Updated bathrooms</label>
+        <label class="check"><input type="checkbox" name="cond" value="Finished basement" /> Finished basement</label>
+        <label class="check"><input type="checkbox" name="cond" value="Roof under 10 years old" /> Roof under 10 years old</label>
+        <label class="check"><input type="checkbox" name="cond" value="New furnace or AC" /> New furnace or AC</label>
+        <label class="check"><input type="checkbox" name="cond" value="Needs major repairs" /> Needs major repairs</label>
+      </div>
+      <p class="group-label">What are you thinking about?</p>
+      <div class="pill-radio" id="a-intent">
+        <label><input type="radio" name="intent" value="sell" checked /><span>Selling</span></label>
+        <label><input type="radio" name="intent" value="rent" /><span>Renting it out</span></label>
+        <label><input type="radio" name="intent" value="refi" /><span>Refinancing</span></label>
+        <label><input type="radio" name="intent" value="curious" /><span>Just curious</span></label>
+      </div>
+      <div class="field" id="a-timeline-field">
+        <label for="a-timeline">Timeline</label>
+        <select id="a-timeline" name="timeline">
+          <option value="in the next 3 months">In the next 3 months</option>
+          <option value="in 3 to 6 months" selected>In 3 to 6 months</option>
+          <option value="in 6 to 12 months">In 6 to 12 months</option>
+          <option value="more than a year out">More than a year out</option>
+          <option value="sometime, timing open">Not sure yet</option>
+        </select>
+      </div>
+      <button class="btn-navy" type="submit">Continue</button>
+    </form>
+  </div>
+  <div id="a-step-sms" class="a-hero" hidden>
+    <h1>Verify it’s you.</h1>
+    <p>We’ll text a 4-digit code to unlock your draft. In this preview, use code <code>1234</code>.</p>
+    <p class="why-text"><strong>Why a text?</strong> So Joel knows he’s reaching a real person. Your number goes to Joel only. It isn’t sold or shared.</p>
+    <form id="a-sms">
+      <div class="field"><label>Name</label><input name="name" autocomplete="name" required /></div>
+      <div class="field"><label>Email</label><input name="email" type="email" autocomplete="email" required /></div>
+      <div class="field"><label>Mobile</label><input name="phone" type="tel" autocomplete="tel" required placeholder="517-555-0142" /></div>
+      <label class="consent"><input type="checkbox" id="a-consent" /> <span>I agree Sodeman Realty may text me about this request. Message and data rates may apply. Reply STOP to opt out. (Placeholder copy. Needs legal review.)</span></label>
+      <p class="err" id="a-consent-err">Check the box so we can text your code.</p>
+      <button class="btn-navy" type="button" id="a-send">Text me a code</button>
+      <div id="a-code-wrap" hidden style="margin-top:16px">
+        <div class="field"><label>Code</label><input id="a-code" inputmode="numeric" maxlength="4" placeholder="1234" /></div>
+        <p class="err" id="a-sms-err">Enter the 4-digit code (use 1234 in this preview).</p>
+        <button class="btn-navy" type="submit">Unlock draft CMA</button>
+      </div>
+    </form>
+  </div>
+  <div id="a-step-report" class="a-draft" hidden>
+    <div class="joel-card">
+      <img src="/assets/img/joel-headshot.jpg" alt="Joel Sodeman" width="88" height="88" />
+      <div>
+        <h3>What I’d actually change</h3>
+        <p class="joel-meta">Joel Sodeman · Broker</p>
+        <p class="joel-heard" id="a-heard">You told me: no updates or repairs flagged.</p>
+        <p style="margin:0 0 14px;font-size:14px;line-height:1.5">This draft treats every nearby sale the same way. I won’t. I’ll weigh what you told me, check condition and the school line on each sold, and price to the house, not the algorithm.</p>
+        <p class="joel-promise"><strong>Same business day.</strong> I answer my own phone.</p>
+        <button class="btn-navy" type="button" style="width:auto;background:var(--gold);color:var(--navy)" data-toast="Noted. Joel’s follow-up is queued (preview).">Request Joel’s review</button>
+        <div class="joel-contact">
+          <span>Call or Text Joel at 517-898-6412</span>
+          <a id="a-email" href="mailto:joel@sodemanrealty.com?subject=My%20draft%20CMA">Email Joel</a>
+        </div>
+      </div>
+    </div>
+    <span class="stamp">Unofficial draft</span>
+    <p class="muted" style="margin:12px 0 0;color:var(--color-text-muted);font-size:14px" id="a-subj">SAMPLE · 1847 Holbrook Dr, East Lansing</p>
+    <div class="range" id="a-range">$251,000 to $301,000</div>
+    <p class="a-mid" id="a-mid">Draft midpoint $282,000. A starting point, not a price.</p>
+    <p style="margin:0 0 8px;color:var(--color-text-muted)" id="a-facts">4 nearby solds · last 13 months · within 0.6 mi. Joel has not walked this house.</p>
+    <div class="a-stats">
+      <div class="a-stat"><span>Price per sq ft</span><strong id="a-ppsf">$174</strong></div>
+      <div class="a-stat"><span>Price change, last 12 months</span><strong>+2.4%</strong></div>
+      <div class="a-stat"><span>Days on market nearby</span><strong id="a-dom">27</strong></div>
+      <div class="a-stat"><span>Comps used</span><strong id="a-ncomps">4</strong></div>
+    </div>
+    <div class="a-map"><div id="a-leaflet" role="img" aria-label="Map of subject and comparable solds in East Lansing"></div></div>
+    <p style="font-size:12px;color:var(--color-text-muted);margin:0 0 16px">OpenStreetMap · sample pins for this preview.</p>
+
+    <h2 style="font-family:var(--font-serif);color:var(--navy);font-weight:400;margin:28px 0 0">Where your house sits</h2>
+    <div class="scatter">
+      <svg id="a-scatter" viewBox="0 0 600 290" role="img" aria-label="Sold price by approximate square feet for four nearby solds, with your draft range marked"></svg>
+    </div>
+    <p class="fine" style="margin-top:0">Sold price by approximate sq ft. Gold dots are nearby solds. The shaded bar is your draft range. Sample data, not live MLS.</p>
+
+    <h2 style="font-family:var(--font-serif);color:var(--navy);font-weight:400;margin:28px 0 8px">Comparable solds, adjusted to your house</h2>
+    <p class="why-text">Each sold is adjusted to match what you entered: about $60 per sq ft of size difference, $8,000 per bedroom, and $7,500 per full bath. This draft makes no adjustment for time or condition. Joel adds those.</p>
+    <div class="table-scroll">
+      <table class="a-table">
+        <thead>
+          <tr><th>Sold</th><th>Date</th><th>Beds / baths</th><th>Sq ft</th><th>Dist</th><th>Sold price</th><th>Adjustments</th><th>Adjusted</th></tr>
+        </thead>
+        <tbody id="a-comps-body"></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>What this draft can’t see</h2>
+      <p>None of these move the draft number. They are what Joel checks before he gives you his.</p>
+      <ul class="cantsee-list" id="a-cantsee"></ul>
+    </div>
+
+    <div class="section">
+      <h2>Your buyer’s property taxes</h2>
+      <p>Under Michigan’s Proposal A, a home’s taxable value uncaps when it sells. Your buyer’s taxable value resets to about half of market value, so their tax bill is often well above yours. Buyers and lenders price that in.</p>
+      <div class="calc-grid">
+        <div class="field">
+          <label for="a-tax-now">Your annual property tax today</label>
+          <input id="a-tax-now" type="number" min="0" step="100" value="3900" />
+        </div>
+        <div class="field">
+          <label for="a-mills">Millage rate (mills)</label>
+          <input id="a-mills" type="number" min="0" step="0.5" value="42" />
+        </div>
+      </div>
+      <table class="ledger">
+        <tr><td>Your taxes today</td><td id="a-tax-now-out">$3,900</td></tr>
+        <tr><td>Buyer’s estimated first full year</td><td id="a-tax-buyer">$5,922</td></tr>
+        <tr class="total"><td>Difference in a buyer’s monthly cost</td><td id="a-tax-diff">+$169 per month</td></tr>
+      </table>
+      <p class="fine">Sample homestead millage. Rates differ by city, township, and school district. Joel confirms the real rate for your address.</p>
+    </div>
+
+    <div class="section">
+      <h2>What you might walk away with</h2>
+      <p>Sellers decide on the net, not the sale price. Here is a rough net at the draft midpoint.</p>
+      <div class="calc-grid">
+        <div class="field">
+          <label for="a-payoff">Mortgage payoff (optional)</label>
+          <input id="a-payoff" type="number" min="0" step="1000" value="0" />
+        </div>
+        <div class="field">
+          <label for="a-comm">Total commission % (negotiable)</label>
+          <input id="a-comm" type="number" min="0" max="10" step="0.25" value="5" />
+        </div>
+      </div>
+      <table class="ledger">
+        <tr><td>Sale price (draft midpoint)</td><td id="a-net-price">$282,000</td></tr>
+        <tr><td>Commission</td><td id="a-net-comm">−$14,100</td></tr>
+        <tr><td>Michigan transfer tax (state and county)</td><td id="a-net-transfer">−$2,425</td></tr>
+        <tr><td>Title and closing costs (about 1%)</td><td id="a-net-closing">−$2,820</td></tr>
+        <tr><td>Mortgage payoff</td><td id="a-net-payoff">$0</td></tr>
+        <tr class="total"><td>Estimated net</td><td id="a-net-total">$262,655</td></tr>
+      </table>
+      <p class="fine" id="a-net-range">At the low end of the range: $233,781. At the high end: $280,351.</p>
+      <p class="fine">Transfer tax uses Michigan’s state rate ($3.75 per $500) plus the county rate ($0.55 per $500). Some sellers qualify for an exemption. Joel checks.</p>
+    </div>
+
+    <div class="section" id="a-intent-section">
+      <h2 id="a-intent-title">Selling in 3 to 6 months</h2>
+      <p id="a-intent-body"></p>
+    </div>
+
+    <div class="section alert-box">
+      <div>
+        <h2 style="margin:0">Text me when a house like mine sells</h2>
+        <p>Within a mile and close in size. One text per sale. No newsletter. Reply STOP anytime.</p>
+      </div>
+      <button class="btn-navy" type="button" id="a-alert" style="width:auto">Turn on sold alerts</button>
+    </div>
+    <p class="fine" style="margin-top:28px">Preview only. Addresses, solds, taxes, and rents are sample data. This draft is not an appraisal.</p>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    const toastEl = document.getElementById('toast');
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.style.display = 'block';
+      setTimeout(() => { toastEl.style.display = 'none'; }, 2200);
+    }
+    document.querySelectorAll('[data-toast]').forEach(b => {
+      b.addEventListener('click', () => toast(b.getAttribute('data-toast')));
+    });
+
+
+    let aMap = null;
+    function initAMap() {
+      if (typeof L === 'undefined') return;
+      if (aMap) {
+        setTimeout(() => aMap.invalidateSize(), 50);
+        return;
+      }
+      aMap = L.map('a-leaflet', { scrollWheelZoom: false }).setView([42.7369, -84.4837], 14);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(aMap);
+      const subject = L.circleMarker([42.7369, -84.4837], { radius: 9, color: '#A88A4B', fillColor: '#0B1F3A', fillOpacity: 1, weight: 2 })
+        .addTo(aMap).bindPopup('<strong>Subject (sample)</strong><br>1847 Holbrook Dr');
+      const comps = [
+        { lat: 42.7384, lng: -84.4812, label: '412 Albert Ave', href: 'comps/412-albert-ave.html' },
+        { lat: 42.7348, lng: -84.4865, label: '920 Sunset Ln', href: 'comps/920-sunset-ln.html' },
+        { lat: 42.7396, lng: -84.4878, label: '77 Beech St', href: 'comps/77-beech-st.html' },
+        { lat: 42.7335, lng: -84.4799, label: '210 Kedzie Ct', href: 'comps/210-kedzie-ct.html' }
+      ];
+      comps.forEach(c => {
+        L.circleMarker([c.lat, c.lng], { radius: 7, color: '#0B1F3A', fillColor: '#A88A4B', fillOpacity: 0.95, weight: 2 })
+          .addTo(aMap)
+          .bindPopup('<a href="' + c.href + '">' + c.label + '</a>');
+      });
+      subject.openPopup();
+      setTimeout(() => aMap.invalidateSize(), 80);
+    }
+    const COMPS = [
+      { addr: '412 Albert Ave', href: 'comps/412-albert-ave.html', date: 'Mar 2026', beds: 3, baths: 1.5, sqft: 1540, price: 289000, dist: '0.2 mi', dom: 11 },
+      { addr: '920 Sunset Ln', href: 'comps/920-sunset-ln.html', date: 'Jan 2026', beds: 3, baths: 2, sqft: 1710, price: 305500, dist: '0.4 mi', dom: 22 },
+      { addr: '77 Beech St', href: 'comps/77-beech-st.html', date: 'Nov 2025', beds: 4, baths: 2, sqft: 1820, price: 271000, dist: '0.5 mi', dom: 34 },
+      { addr: '210 Kedzie Ct', href: 'comps/210-kedzie-ct.html', date: 'Sep 2025', beds: 3, baths: 1, sqft: 1380, price: 258000, dist: '0.6 mi', dom: 41 }
+    ];
+    const ADJ = { sqft: 60, bed: 8000, bath: 7500 };
+    const TRANSFER_PER_500 = 3.75 + 0.55;
+    const CLOSING_RATE = 0.01;
+    const NAVY = '#0B1F3A', GOLD = '#A88A4B', MUTED = '#5b5b5b', GRID = 'rgba(11,31,58,.12)';
+    const CANT_SEE = {
+      'Updated kitchen': 'Often the biggest gap between two houses that look alike on paper.',
+      'Updated bathrooms': 'Buyers in this price band notice dated baths quickly.',
+      'Finished basement': 'Below-grade space is valued differently than main-floor square feet.',
+      'Roof under 10 years old': 'Removes one of the most common inspection objections.',
+      'New furnace or AC': 'Fewer inspection credits to negotiate later.',
+      'Needs major repairs': 'Joel prices this in up front so it doesn’t surprise you at inspection.'
+    };
+    const ALWAYS_CHECK = [
+      ['School district and attendance lines', 'Two streets apart can mean a different district and a different buyer pool.'],
+      ['Condition of each sold', 'A sold that was dated or distressed can drag a draft down. Joel drops or discounts those.'],
+      ['Lot, street, and traffic', 'Corner lots, busy roads, and backyards that face a parking lot all move price.']
+    ];
+    const INTENT = {
+      sell: t => ['Selling ' + t, 'These solds are what buyers will compare you to. Next step: a 20-minute walk-through so Joel can replace this draft with his own number and a list-price plan.'],
+      rent: () => ['Renting it out instead', 'Sample rent for a house like this: $1,900 to $2,300 per month. Rental licensing and occupancy rules differ by city and neighborhood around East Lansing. Joel checks the rules for your address before you count on the rent.'],
+      refi: () => ['Refinancing', 'Your lender will order an appraisal. This draft doesn’t replace it, but it tells you whether your target value is realistic before you pay for one.'],
+      curious: () => ['Just curious', 'No pressure, and no calls unless you ask for one. Turn on sold alerts below to see when a house like yours sells.']
+    };
+    const money = n => '$' + Math.round(n).toLocaleString();
+    const signed = n => (n < 0 ? '−' : '+') + money(Math.abs(n));
+    let draft = null;
+
+    function subjectFacts() {
+      return {
+        beds: parseFloat(document.getElementById('a-beds').value) || 3,
+        baths: parseFloat(document.getElementById('a-baths').value) || 2,
+        sqft: parseFloat(document.getElementById('a-sqft').value) || 1620
+      };
+    }
+    function adjustComp(c, s) {
+      const parts = [];
+      let total = 0;
+      const size = (s.sqft - c.sqft) * ADJ.sqft;
+      if (size) { total += size; parts.push(signed(size) + ' size'); }
+      const bedDiff = s.beds - c.beds;
+      if (bedDiff) { const v = bedDiff * ADJ.bed; total += v; parts.push(signed(v) + (Math.abs(bedDiff) > 1 ? ' bedrooms' : ' bedroom')); }
+      const bathDiff = s.baths - c.baths;
+      if (bathDiff) { const v = bathDiff * ADJ.bath; total += v; parts.push(signed(v) + ' baths'); }
+      return { parts, adjusted: c.price + total };
+    }
+    function buildDraft(s) {
+      const rows = COMPS.map(c => Object.assign({}, c, adjustComp(c, s)));
+      const vals = rows.map(r => r.adjusted);
+      return {
+        rows,
+        subject: s,
+        low: Math.floor(Math.min(...vals) / 1000) * 1000,
+        high: Math.ceil(Math.max(...vals) / 1000) * 1000,
+        mid: Math.round(vals.reduce((a, b) => a + b, 0) / vals.length / 500) * 500
+      };
+    }
+    function renderComps(d) {
+      document.getElementById('a-comps-body').innerHTML = d.rows.map(r =>
+        '<tr><td><a href="' + r.href + '">' + r.addr + '</a></td>' +
+        '<td>' + r.date + '</td><td>' + r.beds + ' / ' + r.baths + '</td>' +
+        '<td>' + r.sqft.toLocaleString() + '</td><td>' + r.dist + '</td>' +
+        '<td>' + money(r.price) + '</td>' +
+        '<td class="adj-cell">' + (r.parts.length ? r.parts.join('<br>') : 'None') + '</td>' +
+        '<td><strong>' + money(r.adjusted) + '</strong></td></tr>'
+      ).join('');
+    }
+    function renderScatter(d) {
+      const W = 600, H = 290, L = 72, R = 24, T = 18, B = 52;
+      const xs = d.rows.map(r => r.sqft).concat(d.subject.sqft);
+      const ys = d.rows.map(r => r.price).concat(d.low, d.high);
+      const x0 = Math.floor((Math.min(...xs) - 100) / 100) * 100;
+      const x1 = Math.ceil((Math.max(...xs) + 100) / 100) * 100;
+      const y0 = Math.floor((Math.min(...ys) - 10000) / 20000) * 20000;
+      const y1 = Math.ceil((Math.max(...ys) + 10000) / 20000) * 20000;
+      const sx = v => L + (v - x0) / (x1 - x0) * (W - L - R);
+      const sy = v => H - B - (v - y0) / (y1 - y0) * (H - T - B);
+      const xStep = (x1 - x0) > 800 ? 200 : 100;
+      let g = '';
+      for (let v = y0; v <= y1; v += 20000) {
+        g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + sy(v) + '" y2="' + sy(v) + '" stroke="' + GRID + '"/>';
+        g += '<text x="' + (L - 8) + '" y="' + (sy(v) + 4) + '" text-anchor="end" font-size="11" fill="' + MUTED + '">$' + (v / 1000) + 'k</text>';
+      }
+      for (let v = x0; v <= x1; v += xStep) {
+        g += '<line x1="' + sx(v) + '" x2="' + sx(v) + '" y1="' + (H - B) + '" y2="' + (H - B + 4) + '" stroke="' + MUTED + '"/>';
+        g += '<text x="' + sx(v) + '" y="' + (H - B + 18) + '" text-anchor="middle" font-size="11" fill="' + MUTED + '">' + v.toLocaleString() + '</text>';
+      }
+      g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" stroke="' + MUTED + '"/>';
+      g += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="12" fill="' + NAVY + '">Approximate sq ft</text>';
+      g += '<text transform="translate(16 ' + ((T + H - B) / 2) + ') rotate(-90)" text-anchor="middle" font-size="12" fill="' + NAVY + '">Sold price</text>';
+      const bx = sx(d.subject.sqft);
+      g += '<rect x="' + (bx - 7) + '" y="' + sy(d.high) + '" width="14" height="' + (sy(d.low) - sy(d.high)) + '" rx="3" fill="' + NAVY + '" opacity=".18"/>';
+      g += '<circle cx="' + bx + '" cy="' + sy(d.mid) + '" r="7" fill="' + NAVY + '" stroke="' + GOLD + '" stroke-width="2"/>';
+      g += '<text x="' + (bx + 12) + '" y="' + (sy(d.mid) + 4) + '" font-size="12" font-weight="600" fill="' + NAVY + '">Your house</text>';
+      d.rows.forEach(r => {
+        g += '<a href="' + r.href + '"><circle cx="' + sx(r.sqft) + '" cy="' + sy(r.price) + '" r="6" fill="' + GOLD + '" stroke="' + NAVY + '" stroke-width="1.5"/>';
+        g += '<text x="' + sx(r.sqft) + '" y="' + (sy(r.price) - 10) + '" text-anchor="middle" font-size="11" fill="' + NAVY + '">' + r.addr.replace(/ (Ave|Ln|St|Ct)$/, '') + '</text></a>';
+      });
+      document.getElementById('a-scatter').innerHTML = g;
+    }
+    function selectedConds() {
+      return [...document.querySelectorAll('#a-addr input[name="cond"]:checked')].map(i => i.value);
+    }
+    function selectedIntent() {
+      return document.querySelector('#a-addr input[name="intent"]:checked').value;
+    }
+    function renderHeard() {
+      const conds = selectedConds();
+      const intent = selectedIntent();
+      const timeline = document.getElementById('a-timeline').value;
+      const intentLine = {
+        sell: 'Selling ' + timeline + '.',
+        rent: 'Thinking about renting it out, ' + timeline + '.',
+        refi: 'Refinancing.',
+        curious: 'Just curious for now.'
+      }[intent];
+      document.getElementById('a-heard').textContent = 'You told me: ' +
+        (conds.length ? conds.join(', ').toLowerCase() + '. ' : 'no updates or repairs flagged. ') + intentLine;
+      const flagged = conds.map(c => '<li class="flagged"><strong>' + c + '.</strong> ' + CANT_SEE[c] + '</li>');
+      const always = ALWAYS_CHECK.map(([t, why]) => '<li><strong>' + t + '.</strong> ' + why + '</li>');
+      document.getElementById('a-cantsee').innerHTML = flagged.concat(always).join('');
+      const [title, body] = INTENT[intent](timeline);
+      document.getElementById('a-intent-title').textContent = title;
+      document.getElementById('a-intent-body').textContent = body;
+    }
+    function renderTax() {
+      if (!draft) return;
+      const current = parseFloat(document.getElementById('a-tax-now').value) || 0;
+      const mills = parseFloat(document.getElementById('a-mills').value) || 0;
+      const buyer = draft.mid * 0.5 * mills / 1000;
+      document.getElementById('a-tax-now-out').textContent = money(current);
+      document.getElementById('a-tax-buyer').textContent = money(buyer);
+      document.getElementById('a-tax-diff').textContent = signed((buyer - current) / 12) + ' per month';
+    }
+    function netAt(price, pct, payoff) {
+      const commission = price * pct / 100;
+      const transfer = Math.ceil(price / 500) * TRANSFER_PER_500;
+      const closing = price * CLOSING_RATE;
+      return { commission, transfer, closing, net: price - commission - transfer - closing - payoff };
+    }
+    function renderNet() {
+      if (!draft) return;
+      const pct = parseFloat(document.getElementById('a-comm').value) || 0;
+      const payoff = parseFloat(document.getElementById('a-payoff').value) || 0;
+      const m = netAt(draft.mid, pct, payoff);
+      document.getElementById('a-net-price').textContent = money(draft.mid);
+      document.getElementById('a-net-comm').textContent = signed(-m.commission);
+      document.getElementById('a-net-transfer').textContent = signed(-m.transfer);
+      document.getElementById('a-net-closing').textContent = signed(-m.closing);
+      document.getElementById('a-net-payoff').textContent = payoff ? signed(-payoff) : '$0';
+      document.getElementById('a-net-total').textContent = money(m.net);
+      document.getElementById('a-net-range').textContent =
+        'At the low end of the range: ' + money(netAt(draft.low, pct, payoff).net) +
+        '. At the high end: ' + money(netAt(draft.high, pct, payoff).net) + '.';
+    }
+    function unlockA(addr) {
+      document.getElementById('a-step-address').hidden = true;
+      document.getElementById('a-step-sms').hidden = true;
+      document.getElementById('a-step-report').hidden = false;
+      const s = subjectFacts();
+      draft = buildDraft(s);
+      if (addr) {
+        document.getElementById('a-subj').textContent = 'SAMPLE · ' + addr;
+        document.getElementById('a-email').href = 'mailto:joel@sodemanrealty.com?subject=' + encodeURIComponent('My draft CMA: ' + addr);
+      }
+      document.getElementById('a-range').textContent = money(draft.low) + ' to ' + money(draft.high);
+      document.getElementById('a-mid').textContent = 'Draft midpoint ' + money(draft.mid) + '. A starting point, not a price.';
+      document.getElementById('a-facts').textContent =
+        s.beds + ' bed · ' + s.baths + ' bath · ' + s.sqft.toLocaleString() + ' sq ft · ' +
+        COMPS.length + ' nearby solds · last 13 months · within 0.6 mi. Joel has not walked this house.';
+      document.getElementById('a-ppsf').textContent = money(draft.mid / s.sqft);
+      document.getElementById('a-dom').textContent = Math.round(COMPS.reduce((a, c) => a + c.dom, 0) / COMPS.length);
+      document.getElementById('a-ncomps').textContent = COMPS.length;
+      renderComps(draft);
+      renderScatter(draft);
+      renderHeard();
+      renderTax();
+      renderNet();
+      initAMap();
+      window.scrollTo(0, 0);
+    }
+    ['a-tax-now', 'a-mills'].forEach(id => document.getElementById(id).addEventListener('input', renderTax));
+    ['a-comm', 'a-payoff'].forEach(id => document.getElementById(id).addEventListener('input', renderNet));
+    document.querySelectorAll('#a-intent input').forEach(r => r.addEventListener('change', () => {
+      const v = selectedIntent();
+      document.getElementById('a-timeline-field').hidden = v === 'refi' || v === 'curious';
+    }));
+    document.getElementById('a-alert').addEventListener('click', (e) => {
+      e.currentTarget.textContent = 'Sold alerts on';
+      e.currentTarget.disabled = true;
+      toast('Preview: Joel will text when a similar house sells within a mile.');
+    });
+    document.getElementById('a-addr').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('a-step-address').hidden = true;
+      document.getElementById('a-step-sms').hidden = false;
+    });
+    document.getElementById('a-send').addEventListener('click', () => {
+      const err = document.getElementById('a-consent-err');
+      if (!document.getElementById('a-consent').checked) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+      document.getElementById('a-code-wrap').hidden = false;
+      toast('Preview: code sent (use 1234)');
+    });
+    document.getElementById('a-sms').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const code = document.getElementById('a-code').value.trim();
+      const err = document.getElementById('a-sms-err');
+      if (code !== '1234') { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+      const addr = document.getElementById('a-address').value || '1847 Holbrook Dr, East Lansing';
+      unlockA(addr);
+    });
+  </script>
+</body>
+</html>

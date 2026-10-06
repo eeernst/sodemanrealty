@@ -3,6 +3,8 @@ const { DateTime } = require("luxon");
 module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.ignores.add("src/assets/img/CREDITS.md");
+  eleventyConfig.addPassthroughCopy({ "src/draft-cma": "draft-cma" });
+  eleventyConfig.ignores.add("src/draft-cma/**");
 
   eleventyConfig.addFilter("date", function(dateObj, format) {
     return DateTime.fromJSDate(dateObj).toFormat(format);
