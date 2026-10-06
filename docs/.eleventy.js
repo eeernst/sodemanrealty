@@ -5,6 +5,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.ignores.add("src/assets/img/CREDITS.md");
   eleventyConfig.addPassthroughCopy({ "src/draft-cma": "draft-cma" });
   eleventyConfig.ignores.add("src/draft-cma/**");
+  eleventyConfig.addPassthroughCopy({ "src/home-value": "home-value" });
+  eleventyConfig.ignores.add("src/home-value/**");
 
   eleventyConfig.addFilter("date", function(dateObj, format) {
     return DateTime.fromJSDate(dateObj).toFormat(format);
